@@ -6,15 +6,10 @@ const https = require('https');
 
 function httpsGet(url, options = {}) {
   return new Promise((resolve, reject) => {
-    const fullUrl = url.startsWith('http')
-      ? url.replace('webcal://', 'https://')
-      : `https://web.eduflexcloud.nl${url}`;
-    const req = https.get(fullUrl, options, res => {
+    const req = https.get(url.replace('webcal://', 'https://'), options, res => {
+      // Follow redirects
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        const location = res.headers.location.startsWith('http')
-          ? res.headers.location
-          : `https://web.eduflexcloud.nl${res.headers.location}`;
-        return httpsGet(location, options).then(resolve).catch(reject);
+        return httpsGet(res.headers.location, options).then(resolve).catch(reject);
       }
       let data = '';
       res.on('data', chunk => data += chunk);
@@ -24,6 +19,7 @@ function httpsGet(url, options = {}) {
     req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout')); });
   });
 }
+
 function httpsPost(url, postData, headers = {}) {
   return new Promise((resolve, reject) => {
     const urlObj = new URL(url);
@@ -403,8 +399,8 @@ async function main() {
       const eduflexItems = await getEduflexRooster();
       items.push(...eduflexItems);
     } catch (err) {
-    console.error('❌ Eduflex mislukt:', err.message);
-    console.error('❌ Stack:', err.stack);
+      console.error('❌ Eduflex mislukt:', err.message);
+      fouten.eduflex = err.message;
     }
   } else {
     console.log('ℹ️  Geen Eduflex credentials, overgeslagen');
