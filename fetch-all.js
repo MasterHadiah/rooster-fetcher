@@ -137,12 +137,23 @@ async function getEduflex() {
     });
 
     // Wacht tot het rooster geladen is
-    await page.waitForFunction(
-      () => document.body.innerHTML.includes('AddAppointment'),
-      { timeout: 20000 }
-    ).catch(() => console.warn('   Timeout wachten op rooster, probeer toch te parsen...'));
+  // Wacht tot het rooster geladen is
+    try {
+      await page.waitForFunction(
+        () => document.body.innerHTML.includes('AddAppointment'),
+        { timeout: 20000 }
+      );
+      console.log('   ✅ AddAppointment gevonden in pagina');
+    } catch(e) {
+      console.warn('   ⚠️ Timeout - AddAppointment niet gevonden, pagina titel:', await page.title());
+      console.log('   Pagina URL:', page.url());
+      // Screenshot voor debug
+    }
 
     const html1 = await page.content();
+    console.log('   HTML bevat dxo:', html1.includes('dxo.'));
+    console.log('   HTML bevat mySchedule:', html1.includes('mySchedule'));
+    console.log('   HTML lengte:', html1.length);
     const week1 = parseEduflex(html1);
     console.log(`   Week 1 (huidig): ${week1.length} items`);
 
