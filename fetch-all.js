@@ -187,7 +187,8 @@ async function getEduflexRooster() {
 
   if (!username || !password) throw new Error('EDUFLEX_USER and EDUFLEX_PASS required');
 
-  const BASE     = 'https://web.eduflexcloud.nl';
+  const HOST     = 'web.eduflexcloud.nl';
+  const BASE     = `https://${HOST}`;
   const LOGIN    = `${BASE}/JA/webma/Pages/Default`;
   const ROOSTER  = `${BASE}/JA/webma/Pages/DocentRooster`;
 
@@ -262,11 +263,10 @@ async function getEduflexRooster() {
   });
 
   await new Promise((resolve, reject) => {
-    const urlObj = new URL(LOGIN);
     const postData = params.toString();
     const req = https.request({
-      hostname: urlObj.hostname,
-      path: urlObj.pathname,
+      hostname: HOST,
+      path: '/JA/webma/Pages/Default',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -332,11 +332,10 @@ async function getEduflexRooster() {
       });
 
       const nextWeekData = await new Promise((resolve, reject) => {
-        const urlObj = new URL(ROOSTER);
         const postData = callbackParams.toString();
         const req = https.request({
-          hostname: urlObj.hostname,
-          path: urlObj.pathname,
+          hostname: HOST,
+          path: '/JA/webma/Pages/DocentRooster',
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
