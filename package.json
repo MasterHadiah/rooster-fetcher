@@ -1,12 +1,10 @@
 {
   "name": "rooster-fetcher",
   "version": "1.0.0",
-  "description": "Fetches Eduflex schedule and writes rooster.json",
+  "description": "Fetches Magister + Eduflex schedule and writes rooster.json",
   "main": "scripts/fetch-all.js",
   "scripts": {
     "fetch": "node scripts/fetch-all.js"
   },
-  "dependencies": {
-    "puppeteer": "^22.0.0"
-  }
+  "dependencies": {}
 }
