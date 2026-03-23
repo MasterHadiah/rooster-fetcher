@@ -6,9 +6,10 @@ const https = require('https');
 
 function httpsGet(url, options = {}) {
   return new Promise((resolve, reject) => {
-    const fullUrl = url.startsWith('http') ? url : `https://web.eduflexcloud.nl${url}`;
-    const req = https.get(fullUrl.replace('webcal://', 'https://'), options, res => {
-      // Follow redirects
+    const fullUrl = url.startsWith('http')
+      ? url.replace('webcal://', 'https://')
+      : `https://web.eduflexcloud.nl${url}`;
+    const req = https.get(fullUrl, options, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         const location = res.headers.location.startsWith('http')
           ? res.headers.location
@@ -23,7 +24,6 @@ function httpsGet(url, options = {}) {
     req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout')); });
   });
 }
-
 function httpsPost(url, postData, headers = {}) {
   return new Promise((resolve, reject) => {
     const urlObj = new URL(url);
