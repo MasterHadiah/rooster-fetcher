@@ -56,7 +56,7 @@ function parseICS(text) {
 
 function parseEduflex(html) {
   const items = [];
-  const re = /\w+\.AddAppointment\("(\d+)",\s*new Date\((\d+),(\d+),(\d+),(\d+),(\d+)\),\s*(\d+),[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\(\{([^}]+)\}\)\)/g;
+  const re = /\w+\.AddAppointment\("(\d+)",\s*new Date\((\d+),(\d+),(\d+),(\d+),(\d+)\),\s*(\d+),\s*\[[^\]]*\],\s*"[^"]*",\s*"[^"]*",\s*"[^"]*",\s*"[^"]*",\s*[\d,\s]+,\(\{([^}]+)\}\)\)/g;
   let m;
   while ((m = re.exec(html)) !== null) {
     const [,, yr, mo, dy, hr, mn, dur, propsStr] = m;
