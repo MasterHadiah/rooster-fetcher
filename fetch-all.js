@@ -169,7 +169,7 @@ async function getEduflex() {
   const jar = {};
 
  // 1. GET login page — volg eventuele redirect
-  let r1 = await getWithCookies('/JA/webma/Pages/Default', '');
+let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault', '');
   parseCookies(r1.headers, jar);
   if (r1.headers.location) {
     const loc = r1.headers.location.startsWith('http')
