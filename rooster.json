@@ -1,5 +1,5 @@
 {
-  "bijgewerkt": "2026-03-23T11:39:49.491Z",
+  "bijgewerkt": "2026-03-23T11:46:09.075Z",
   "totaal": 60,
   "afspraken": [
     {
@@ -604,6 +604,6 @@
     }
   ],
   "fouten": {
-    "eduflex": "Geen credentials"
+    "eduflex": "Invalid URL"
   }
 }
