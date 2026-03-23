@@ -53,6 +53,7 @@ function parseICS(text) {
 }
 
 // ── Parse Eduflex HTML (AddAppointment calls) ─────────────────────────────────
+// FIX: Trek 1 uur af van alle Eduflex tijden omdat ze een uur te laat worden weergegeven
 
 function parseEduflex(html) {
   const items = [];
@@ -65,9 +66,12 @@ function parseEduflex(html) {
     const pr = /'(\w+)':'([^']*)'/g;
     while ((pm = pr.exec(propsStr)) !== null) props[pm[1]] = pm[2];
 
-    // Tijden uit Eduflex zijn lokale Nederlandse tijd
-    const startStr = `${String(+hr).padStart(2,'0')}:${String(+mn).padStart(2,'0')}`;
-    const eindMs   = (+hr * 60 + +mn) * 60000 + +dur;
+    // 🔧 FIX: Trek 1 uur af van de Eduflex tijden
+    const correctedHour = +hr - 1;
+    const correctedHourStr = String(correctedHour).padStart(2, '0');
+    
+    const startStr = `${correctedHourStr}:${String(+mn).padStart(2,'0')}`;
+    const eindMs   = (correctedHour * 60 + +mn) * 60000 + +dur;
     const eindH    = Math.floor(eindMs / 3600000);
     const eindM    = Math.floor((eindMs % 3600000) / 60000);
     const eindStr  = `${String(eindH).padStart(2,'0')}:${String(eindM).padStart(2,'0')}`;
@@ -77,14 +81,9 @@ function parseEduflex(html) {
     const dagNr   = new Date(+yr, +mo, +dy).getDay();
     const datumStr = `${dagen[dagNr]} ${String(+dy).padStart(2,'0')}-${String(+mo+1).padStart(2,'0')}-${yr}`;
 
-    // FIX: Converteer lokale tijd naar UTC zonder verschuiving
-    const lokaleStart = new Date(+yr, +mo, +dy, +hr, +mn);
-    const timezoneOffset = lokaleStart.getTimezoneOffset() * 60000;
-    const utcStart = new Date(lokaleStart.getTime() - timezoneOffset);
-    const utcEind = new Date(utcStart.getTime() + +dur);
-    
-    const startISO = utcStart.toISOString();
-    const eindISO = utcEind.toISOString();
+    // ISO string met de gecorrigeerde uren
+    const startISO = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${startStr}:00.000Z`;
+    const eindISO  = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${eindStr}:00.000Z`;
 
     const vak  = props.cpVak       || null;
     const attr = props.cpAttribuut || null;
