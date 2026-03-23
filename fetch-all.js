@@ -236,6 +236,9 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(loginData),
         'Cookie': cookieStr(jar),
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'nl-NL,nl;q=0.9',
       }
     }, res => {
       parseCookies(res.headers, jar);
