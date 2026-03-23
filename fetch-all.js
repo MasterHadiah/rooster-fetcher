@@ -1,98 +1,19 @@
-const fs    = require('fs');
-const path  = require('path');
-const https = require('https');
+const fs      = require('fs');
+const path    = require('path');
+const https   = require('https');
+const puppeteer = require('puppeteer');
 
-// ── Generic HTTPS helpers ─────────────────────────────────────────────────────
+// ── Generic HTTPS helper (voor Magister iCal) ─────────────────────────────────
 
 function get(url) {
   return new Promise((resolve, reject) => {
     https.get(url, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        const loc = res.headers.location.startsWith('http')
-          ? res.headers.location
-          : 'https://web.eduflexcloud.nl' + res.headers.location;
-        return get(loc).then(resolve).catch(reject);
+        return get(res.headers.location).then(resolve).catch(reject);
       }
-      let d = ''; res.on('data', c => d += c); res.on('end', () => resolve({ body: d, headers: res.headers }));
+      let d = ''; res.on('data', c => d += c); res.on('end', () => resolve(d));
     }).on('error', reject);
   });
-}
-
-function getWithCookies(urlPath, cookieStr) {
-  return new Promise((resolve, reject) => {
-    const opts = {
-      hostname: 'web.eduflexcloud.nl',
-      path: urlPath,
-      method: 'GET',
-      headers: {
-        'Cookie': cookieStr,
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'nl-NL,nl;q=0.9',
-      }
-    };
-    const req = https.request(opts, res => {
-      let d = ''; res.on('data', c => d += c);
-      res.on('end', () => resolve({ body: d, headers: res.headers }));
-    });
-    req.on('error', reject);
-    req.end();
-  });
-}
-
-function post(urlPath, data, cookie) {
-  return new Promise((resolve, reject) => {
-    const postData = typeof data === 'string' ? data : new URLSearchParams(data).toString();
-    const opts = {
-      hostname: 'web.eduflexcloud.nl',
-      path: urlPath,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(loginData),
-        'Cookie': cookieStr(jar),
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'nl-NL,nl;q=0.9',
-      }
-    };
-    const req = https.request(opts, res => {
-      let d = ''; res.on('data', c => d += c);
-      res.on('end', () => {
-        // If redirect, follow it with GET and pass along cookies
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          const loc = res.headers.location.startsWith('http')
-            ? res.headers.location
-            : 'https://web.eduflexcloud.nl' + res.headers.location;
-          // Merge new cookies into existing cookie string
-          const newJar = {};
-          parseCookies(res.headers, newJar);
-          const allCookies = cookie + '; ' + cookieStr(newJar);
-          getWithCookies(new URL(loc).pathname + (new URL(loc).search || ''), allCookies)
-            .then(resolve).catch(reject);
-        } else {
-          resolve({ body: d, headers: res.headers });
-        }
-      });
-    });
-    req.on('error', reject);
-    req.write(postData);
-    req.end();
-  });
-}
-
-function parseCookies(headers, jar = {}) {
-  const raw = headers['set-cookie'] || [];
-  (Array.isArray(raw) ? raw : [raw]).forEach(c => {
-    const [pair] = c.split(';');
-    const idx = pair.indexOf('=');
-    if (idx > 0) jar[pair.slice(0, idx).trim()] = pair.slice(idx + 1).trim();
-  });
-  return jar;
-}
-
-function cookieStr(jar) {
-  return Object.entries(jar).map(([k, v]) => `${k}=${v}`).join('; ');
 }
 
 // ── Parse Magister iCal ───────────────────────────────────────────────────────
@@ -147,7 +68,7 @@ function parseEduflex(html) {
     const startD = new Date(+yr, +mo, +dy, +hr, +mn);
     const eindD  = new Date(startD.getTime() + +dur);
 
-    const vak  = props.cpVak  || null;
+    const vak  = props.cpVak       || null;
     const attr = props.cpAttribuut || null;
     if (!vak && !attr) continue;
 
@@ -166,192 +87,107 @@ function parseEduflex(html) {
   return items;
 }
 
-// ── Fetch Eduflex ─────────────────────────────────────────────────────────────
+// ── Fetch Eduflex via Puppeteer ───────────────────────────────────────────────
 
 async function getEduflex() {
   const user = process.env.EDUFLEX_USER;
   const pass = process.env.EDUFLEX_PASS;
-  if (!user || !pass) throw new Error('Geen credentials');
+  if (!user || !pass) throw new Error('Geen EDUFLEX credentials');
 
-  console.log('🔑 Eduflex: inloggen...');
-  const jar = {};
+  console.log('🔑 Eduflex: browser starten...');
 
- // 1. GET login page — volg eventuele redirect
-let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault', '');
-  parseCookies(r1.headers, jar);
-  if (r1.headers.location) {
-    const loc = r1.headers.location.startsWith('http')
-      ? r1.headers.location.replace('https://web.eduflexcloud.nl', '')
-      : r1.headers.location;
-    r1 = await getWithCookies(loc, cookieStr(jar));
-    parseCookies(r1.headers, jar);
-  };
-
-  // 2. Extract hidden fields
-  const vs  = r1.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
-  const vsg = r1.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
-  const ev  = r1.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
-
-  // Find field names by looking for text input fields
-  const uField = r1.body.match(/name="([^"]*(?:gebruiker|username)[^"]*)"[^>]*type="text"/i)?.[1]
-              || r1.body.match(/type="text"[^>]*name="([^"]*(?:gebruiker|username)[^"]*)"/i)?.[1]
-              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtGebruikersnaam';
-  const pField = r1.body.match(/name="([^"]*(?:wachtwoord|password)[^"]*)"[^>]*type="password"/i)?.[1]
-              || r1.body.match(/type="password"[^>]*name="([^"]*(?:wachtwoord|password)[^"]*)"/i)?.[1]
-              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtWachtwoord';
-  const bField = r1.body.match(/name="([^"]*(?:btnLogin|login)[^"]*)"[^>]*type="submit"/i)?.[1]
-              || r1.body.match(/type="submit"[^>]*name="([^"]*(?:btnLogin|login)[^"]*)"/i)?.[1]
-              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
-  
-  console.log(`   Login velden: user="${uField}", pass="${pField}", btn="${bField}"`);
-  console.log(`   VIEWSTATE aanwezig: ${vs.length > 0}`);
-  console.log('   Login pagina form HTML:', r1.body.substring(r1.body.indexOf('<form'), r1.body.indexOf('</form>') + 7).slice(0, 500));
-  
-  // 3. POST login — follow all redirects, collect cookies at every hop
-  const loginData = new URLSearchParams({
-    '__VIEWSTATE': vs, '__VIEWSTATEGENERATOR': vsg, '__EVENTVALIDATION': ev,
-    [uField]: user, [pField]: pass, [bField]: 'Inloggen',
-  }).toString();
-
-  // Helper: GET that collects cookies and follows redirects
-  async function getFollowRedirects(urlPath, hops) {
-    if (hops > 5) return;
-    const r = await getWithCookies(urlPath, cookieStr(jar));
-    parseCookies(r.headers, jar);
-    if (r.headers.location) {
-      const loc = r.headers.location.startsWith('http')
-        ? r.headers.location.replace('https://web.eduflexcloud.nl', '')
-        : r.headers.location;
-      return getFollowRedirects(loc, hops + 1);
-    }
-    return r;
-  }
-
-  const postResult = await new Promise((resolve, reject) => {
-    const req = https.request({
-      hostname: 'web.eduflexcloud.nl',
-      path: '/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(loginData),
-        'Cookie': cookieStr(jar),
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'nl-NL,nl;q=0.9',
-      }
-    }, res => {
-      parseCookies(res.headers, jar);
-      let body = '';
-      res.on('data', c => body += c);
-      res.on('end', () => resolve({ status: res.statusCode, location: res.headers.location || null, body }));
-    });
-    req.on('error', reject);
-    req.write(loginData);
-    req.end();
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+    ],
   });
 
-  console.log('   POST status:', postResult.status);
-  console.log('   POST location:', postResult.location);
-  console.log('   POST body begin:', postResult.body.slice(0, 300));
-
-  // Follow redirect if present
-  if (postResult.location) {
-    const loc = postResult.location.startsWith('http')
-      ? postResult.location.replace('https://web.eduflexcloud.nl', '')
-      : postResult.location;
-    await getFollowRedirects(loc, 0);
-  }
-
-  console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
-
-  // 4. GET rooster — first load the outer page to get its VIEWSTATE,
-  // then POST to trigger the actual scheduler content
-  const r3outer = await getFollowRedirects('/JA/webma/Pages/DocentRooster', 0);
-  parseCookies(r3outer.headers, jar);
-
-  const r3vs   = r3outer.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
-  const r3vsg  = r3outer.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
-  const r3ev   = r3outer.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
-
-  console.log('   Outer page VIEWSTATE:', r3vs.length > 0);
-  console.log('   Outer page lengte:', r3outer.body.length);
-  console.log('   Outer page titel:', r3outer.body.match(/<title>([^<]+)/)?.[1]);
-  console.log('   Outer page URL bevat DocentRooster:', r3outer.body.includes('DocentRooster'));
-  console.log('   Outer page form action:', r3outer.body.match(/action="([^"]+)"/)?.[1]);
-
-  // POST to the rooster page with the VIEWSTATE to load the scheduler
-  const r3 = await new Promise((resolve, reject) => {
-    const postData = new URLSearchParams({
-      '__VIEWSTATE': r3vs,
-      '__VIEWSTATEGENERATOR': r3vsg,
-      '__EVENTVALIDATION': r3ev,
-    }).toString();
-    const req = https.request({
-      hostname: 'web.eduflexcloud.nl',
-      path: '/JA/webma/Pages/DocentRooster',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(postData),
-        'Cookie': cookieStr(jar),
-        'Referer': 'https://web.eduflexcloud.nl/JA/webma/Pages/DocentRooster',
-      }
-    }, res => {
-      parseCookies(res.headers, jar);
-      let body = '';
-      res.on('data', c => body += c);
-      res.on('end', () => resolve({ body, headers: res.headers }));
-    });
-    req.on('error', reject);
-    req.write(postData);
-    req.end();
-  });
-
-  const week1 = parseEduflex(r3.body);
-  console.log(`   Week 1: ${week1.length} items`);
-  console.log(`   HTML lengte: ${r3.body.length} tekens`);
-  console.log(`   Bevat AddAppointment: ${r3.body.includes('AddAppointment')}`);
-  console.log(`   Bevat mySchedule: ${r3.body.includes('mySchedule')}`);
-
-  // 5. Try week 2 via next-week navigation
-  // Extract scheduler state for callback
-  const cbState = r3.body.match(/'callbackState':'([^']+)'/)?.[1] || '';
-  const schedulerId = r3.body.match(/ASPx\.createControl\(ASPxClientScheduler,'([^']+)'/)?.[1]
-                   || 'ctl00_ctl00_ContentBody_ContentBody_Rooster_mySchedule';
-
-  const rvs  = r3.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
-  const rvsg = r3.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
-  const rev  = r3.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
-
-  // Compute next Monday
-  const today = new Date();
-  const daysUntilNextMon = (8 - today.getDay()) % 7 || 7;
-  const nextMon = new Date(today); nextMon.setDate(today.getDate() + daysUntilNextMon);
-  nextMon.setHours(8, 0, 0, 0);
-
-  let week2 = [];
   try {
-    const cbData = new URLSearchParams({
-      '__VIEWSTATE': rvs, '__VIEWSTATEGENERATOR': rvsg, '__EVENTVALIDATION': rev,
-      '__CALLBACKID': schedulerId,
-      '__CALLBACKPARAM': `c0:KV|8;AV|${nextMon.getTime()};`,
-    }).toString();
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 900 });
 
-    const r4 = await post('/JA/webma/Pages/DocentRooster', cbData, cookieStr(jar));
-    week2 = parseEduflex(r4.body);
-    console.log(`   Week 2: ${week2.length} items`);
-  } catch(e) {
-    console.warn('   Week 2 overgeslagen:', e.message);
+    // Stap 1: Login
+    console.log('   Navigeren naar loginpagina...');
+    await page.goto('https://web.eduflexcloud.nl/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault', {
+      waitUntil: 'networkidle2',
+      timeout: 30000,
+    });
+
+    // Vul gebruikersnaam en wachtwoord in
+    await page.waitForSelector('input[type="password"]', { timeout: 10000 });
+    await page.type('input[id*="Gebruikersnaam"], input[id*="gebruiker"], input[type="text"]', user, { delay: 30 });
+    await page.type('input[type="password"]', pass, { delay: 30 });
+
+    // Klik op inloggen
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }),
+      page.click('input[type="submit"], button[type="submit"]'),
+    ]);
+
+    console.log('✅ Eduflex: ingelogd, pagina:', await page.title());
+
+    // Stap 2: Navigeer naar DocentRooster
+    await page.goto('https://web.eduflexcloud.nl/JA/webma/Pages/DocentRooster', {
+      waitUntil: 'networkidle2',
+      timeout: 30000,
+    });
+
+    // Wacht tot het rooster geladen is
+    await page.waitForFunction(
+      () => document.body.innerHTML.includes('AddAppointment'),
+      { timeout: 20000 }
+    ).catch(() => console.warn('   Timeout wachten op rooster, probeer toch te parsen...'));
+
+    const html1 = await page.content();
+    const week1 = parseEduflex(html1);
+    console.log(`   Week 1 (huidig): ${week1.length} items`);
+
+    // Stap 3: Navigeer naar volgende week
+    let week2 = [];
+    try {
+      // Klik op de "volgende week" knop
+      const volgendeWeekSelector = [
+        'input[title*="olgende"]',
+        'a[title*="olgende"]',
+        '[id*="next"]',
+        '[id*="Next"]',
+        '[id*="forward"]',
+      ].join(', ');
+
+      await Promise.all([
+        page.waitForFunction(
+          () => document.body.innerHTML.includes('AddAppointment'),
+          { timeout: 15000 }
+        ).catch(() => {}),
+        page.click(volgendeWeekSelector),
+      ]);
+
+      await new Promise(r => setTimeout(r, 2000)); // even wachten tot rooster ververst
+
+      const html2 = await page.content();
+      week2 = parseEduflex(html2);
+      console.log(`   Week 2 (volgend): ${week2.length} items`);
+    } catch(e) {
+      console.warn('   Week 2 overgeslagen:', e.message);
+    }
+
+    const all = [...week1, ...week2];
+    const seen = new Set();
+    const deduped = all.filter(i => {
+      const k = `${i.startISO}|${i.vak}`;
+      return seen.has(k) ? false : seen.add(k);
+    });
+
+    console.log(`✅ Eduflex totaal: ${deduped.length} afspraken`);
+    return deduped;
+
+  } finally {
+    await browser.close();
   }
-
-  const all = [...week1, ...week2];
-  // Deduplicate
-  const seen = new Set();
-  return all.filter(i => {
-    const k = `${i.startISO}|${i.vak}`;
-    return seen.has(k) ? false : seen.add(k);
-  });
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -367,7 +203,7 @@ async function main() {
   // Magister
   try {
     console.log('📅 Magister iCal ophalen...');
-    const { body } = await get(MAGISTER_ICAL);
+    const body = await get(MAGISTER_ICAL);
     magisterItems = parseICS(body);
     console.log(`✅ Magister: ${magisterItems.length} afspraken`);
   } catch(e) {
@@ -378,7 +214,6 @@ async function main() {
   // Eduflex
   try {
     eduflexItems = await getEduflex();
-    console.log(`✅ Eduflex totaal: ${eduflexItems.length} afspraken`);
   } catch(e) {
     console.error('❌ Eduflex mislukt:', e.message);
     fouten.eduflex = e.message;
