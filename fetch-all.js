@@ -65,7 +65,8 @@ function parseEduflex(html) {
     const pr = /'(\w+)':'([^']*)'/g;
     while ((pm = pr.exec(propsStr)) !== null) props[pm[1]] = pm[2];
 
-    const startD = new Date(+yr, +mo, +dy, +hr, +mn);
+   // Eduflex tijden zijn lokaal (Amsterdam) — gebruik UTC constructie om tijdzone shift te voorkomen
+    const startD = new Date(Date.UTC(+yr, +mo, +dy, +hr - 1, +mn));
     const eindD  = new Date(startD.getTime() + +dur);
 
     const vak  = props.cpVak       || null;
