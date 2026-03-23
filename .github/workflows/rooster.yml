@@ -30,7 +30,7 @@ jobs:
             libxss1 libxtst6 fonts-liberation xdg-utils
 
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Rooster ophalen
         env:
