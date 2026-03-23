@@ -6,10 +6,14 @@ const https = require('https');
 
 function httpsGet(url, options = {}) {
   return new Promise((resolve, reject) => {
-    const req = https.get(url.replace('webcal://', 'https://'), options, res => {
+    const fullUrl = url.startsWith('http') ? url : `https://web.eduflexcloud.nl${url}`;
+    const req = https.get(fullUrl.replace('webcal://', 'https://'), options, res => {
       // Follow redirects
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return httpsGet(res.headers.location, options).then(resolve).catch(reject);
+        const location = res.headers.location.startsWith('http')
+          ? res.headers.location
+          : `https://web.eduflexcloud.nl${res.headers.location}`;
+        return httpsGet(location, options).then(resolve).catch(reject);
       }
       let data = '';
       res.on('data', chunk => data += chunk);
