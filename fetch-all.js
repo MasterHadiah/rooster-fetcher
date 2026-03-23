@@ -265,6 +265,9 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
 
   console.log('   Outer page VIEWSTATE:', r3vs.length > 0);
   console.log('   Outer page lengte:', r3outer.body.length);
+  console.log('   Outer page titel:', r3outer.body.match(/<title>([^<]+)/)?.[1]);
+  console.log('   Outer page URL bevat DocentRooster:', r3outer.body.includes('DocentRooster'));
+  console.log('   Outer page form action:', r3outer.body.match(/action="([^"]+)"/)?.[1]);
 
   // POST to the rooster page with the VIEWSTATE to load the scheduler
   const r3 = await new Promise((resolve, reject) => {
