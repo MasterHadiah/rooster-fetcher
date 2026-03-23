@@ -132,7 +132,7 @@ async function main() {
     fouten,
   };
 
-  const outputFile = path.join(__dirname, '..', 'rooster.json');
+  const outputFile = path.join(__dirname, 'rooster.json');
   fs.writeFileSync(outputFile, JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n✅ rooster.json geschreven met ${items.length} afspraken`);
 }
