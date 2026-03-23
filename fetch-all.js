@@ -197,6 +197,7 @@ async function getEduflex() {
   
   console.log(`   Login velden: user="${uField}", pass="${pField}", btn="${bField}"`);
   console.log(`   VIEWSTATE aanwezig: ${vs.length > 0}`);
+  console.log('   Login pagina form HTML:', r1.body.substring(r1.body.indexOf('<form'), r1.body.indexOf('</form>') + 7).slice(0, 500));
   
   // 3. POST login — follow all redirects, collect cookies at every hop
   const loginData = new URLSearchParams({
