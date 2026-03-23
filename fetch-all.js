@@ -85,8 +85,8 @@ function parseEduflex(html) {
       lokaal:  props.cpLokaal || null,
       groep:   props.cpKlas   || null,
       datum:   new Date(+yr, +mo, +dy).toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
-      startISO: new Date(+yr, +mo, +dy, +hr, +mn).toISOString(),
-      eindISO:  new Date(+yr, +mo, +dy, +hr, +mn + Math.floor(+dur/60000)).toISOString(),
+      startISO: new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn)).toISOString(),
+      eindISO:  new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn) + +dur).toISOString(),
       kleur:   props.cpKleur  || null,
       bron:    'eduflex',
     });
