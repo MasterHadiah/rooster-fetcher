@@ -399,8 +399,8 @@ async function main() {
       const eduflexItems = await getEduflexRooster();
       items.push(...eduflexItems);
     } catch (err) {
-      console.error('❌ Eduflex mislukt:', err.message);
-      fouten.eduflex = err.message;
+    console.error('❌ Eduflex mislukt:', err.message);
+    console.error('❌ Stack:', err.stack);
     }
   } else {
     console.log('ℹ️  Geen Eduflex credentials, overgeslagen');
