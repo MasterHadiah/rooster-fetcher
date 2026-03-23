@@ -223,7 +223,7 @@ async function getEduflex() {
   await new Promise((resolve, reject) => {
     const req = https.request({
       hostname: 'web.eduflexcloud.nl',
-      path: '/JA/webma/Pages/Default',
+      path: '/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
