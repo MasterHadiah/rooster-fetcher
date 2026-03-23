@@ -36,10 +36,20 @@ function parseICS(icsText, bron) {
     // Parse ICS datetime: 20260323T083000Z or 20260323T083000
     function parseICSDate(str) {
       if (!str) return null;
-      const s = str.replace('Z','');
-      return new Date(
-        `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(9,11)}:${s.slice(11,13)}:${s.slice(13,15)}${str.endsWith('Z') ? 'Z' : ''}`
-      ).toISOString();
+      try {
+        // Formaat: 20260323T083000Z of 20260323T083000 of 20260323
+        const s = str.replace('Z', '').replace(/\r/g, '');
+        if (s.length === 8) {
+          // Alleen datum, geen tijd: 20260323
+          return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T00:00:00`).toISOString();
+        }
+        const datePart = `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+        const timePart = `${s.slice(9,11)}:${s.slice(11,13)}:${s.slice(13,15)}`;
+        const suffix   = str.endsWith('Z') ? 'Z' : '';
+        return new Date(`${datePart}T${timePart}${suffix}`).toISOString();
+      } catch(e) {
+        return null;
+      }
     }
 
     const startISO = parseICSDate(dtstart);
