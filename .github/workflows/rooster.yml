@@ -35,11 +35,8 @@ jobs:
 
       - name: Rooster ophalen
         env:
-          EDUFLEX_USER:    ${{ secrets.EDUFLEX_USER }}
-          EDUFLEX_PASS:    ${{ secrets.EDUFLEX_PASS }}
-          MAGISTER_SCHOOL: ${{ secrets.MAGISTER_SCHOOL }}
-          MAGISTER_USER:   ${{ secrets.MAGISTER_USER }}
-          MAGISTER_PASS:   ${{ secrets.MAGISTER_PASS }}
+          EDUFLEX_USER: ${{ secrets.EDUFLEX_USER }}
+          EDUFLEX_PASS: ${{ secrets.EDUFLEX_PASS }}
         run: npm run fetch
 
       - name: Commit en push rooster.json
