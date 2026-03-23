@@ -73,14 +73,20 @@ function parseEduflex(html) {
     const attr = props.cpAttribuut || null;
     if (!vak && !attr) continue;
 
+    const startStr = `${String(+hr).padStart(2,'0')}:${String(+mn).padStart(2,'0')}`;
+    const eindMs   = (+hr * 60 + +mn) * 60000 + +dur;
+    const eindH    = Math.floor(eindMs / 3600000);
+    const eindM    = Math.floor((eindMs % 3600000) / 60000);
+    const eindStr  = `${String(eindH).padStart(2,'0')}:${String(eindM).padStart(2,'0')}`;
+
     items.push({
       vak:     vak ? (attr ? `${vak} (${attr})` : vak) : `Extra: ${attr}`,
-      tijd:    `${startD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`,
+      tijd:    `${startStr} - ${eindStr}`,
       lokaal:  props.cpLokaal || null,
       groep:   props.cpKlas   || null,
-      datum:   startD.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
-      startISO: startD.toISOString(),
-      eindISO:  eindD.toISOString(),
+      datum:   new Date(+yr, +mo, +dy).toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
+      startISO: new Date(+yr, +mo, +dy, +hr, +mn).toISOString(),
+      eindISO:  new Date(+yr, +mo, +dy, +hr, +mn + Math.floor(+dur/60000)).toISOString(),
       kleur:   props.cpKleur  || null,
       bron:    'eduflex',
     });
