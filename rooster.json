@@ -1,9 +1,609 @@
 {
-  "bijgewerkt": null,
-  "totaal": 0,
-  "afspraken": [],
+  "bijgewerkt": "2026-03-23T11:00:17.655Z",
+  "totaal": 60,
+  "afspraken": [
+    {
+      "vak": "2 nsk1 - M4GT_nsk1A0",
+      "tijd": "08:15 - 09:05",
+      "lokaal": "F24",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 23-03-2026",
+      "startISO": "2026-03-23T08:15:00.000Z",
+      "eindISO": "2026-03-23T09:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 nsk1 - M4GT_nsk1A0",
+      "tijd": "09:20 - 10:10",
+      "lokaal": "F24",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 23-03-2026",
+      "startISO": "2026-03-23T09:20:00.000Z",
+      "eindISO": "2026-03-23T10:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "12:20 - 15:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 23-03-2026",
+      "startISO": "2026-03-23T12:20:00.000Z",
+      "eindISO": "2026-03-23T15:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 ak - M3GT_akD0",
+      "tijd": "08:15 - 09:05",
+      "lokaal": "G02",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 24-03-2026",
+      "startISO": "2026-03-24T08:15:00.000Z",
+      "eindISO": "2026-03-24T09:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 ak - M3GT_akD0",
+      "tijd": "09:20 - 10:10",
+      "lokaal": "G02",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 24-03-2026",
+      "startISO": "2026-03-24T09:20:00.000Z",
+      "eindISO": "2026-03-24T10:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 ma - V3A",
+      "tijd": "11:30 - 12:20",
+      "lokaal": "G01",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 24-03-2026",
+      "startISO": "2026-03-24T11:30:00.000Z",
+      "eindISO": "2026-03-24T12:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 ma - V3A",
+      "tijd": "12:20 - 13:10",
+      "lokaal": "G01",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 24-03-2026",
+      "startISO": "2026-03-24T12:20:00.000Z",
+      "eindISO": "2026-03-24T13:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "13:20 - 15:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 24-03-2026",
+      "startISO": "2026-03-24T13:20:00.000Z",
+      "eindISO": "2026-03-24T15:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "07:25 - 08:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 25-03-2026",
+      "startISO": "2026-03-25T07:25:00.000Z",
+      "eindISO": "2026-03-25T08:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "07:25 - 08:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 27-03-2026",
+      "startISO": "2026-03-27T07:25:00.000Z",
+      "eindISO": "2026-03-27T08:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 en - V4A",
+      "tijd": "08:15 - 09:05",
+      "lokaal": "F21",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 27-03-2026",
+      "startISO": "2026-03-27T08:15:00.000Z",
+      "eindISO": "2026-03-27T09:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 en - V4A",
+      "tijd": "09:20 - 10:10",
+      "lokaal": "F21",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 27-03-2026",
+      "startISO": "2026-03-27T09:20:00.000Z",
+      "eindISO": "2026-03-27T10:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "1 pvtt - M4GT_pvttE0",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T06:25:00.000Z",
+      "eindISO": "2026-03-30T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 pvtt - M4GT_pvttE0",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T07:15:00.000Z",
+      "eindISO": "2026-03-30T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - M2H_tnC0",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T08:20:00.000Z",
+      "eindISO": "2026-03-30T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - M2H_tnC0",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T09:10:00.000Z",
+      "eindISO": "2026-03-30T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1B",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T10:30:00.000Z",
+      "eindISO": "2026-03-30T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 straks - V1B",
+      "tijd": "11:20 - 12:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T11:20:00.000Z",
+      "eindISO": "2026-03-30T12:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "11:20 - 14:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 30-03-2026",
+      "startISO": "2026-03-30T11:20:00.000Z",
+      "eindISO": "2026-03-30T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - V1H",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 31-03-2026",
+      "startISO": "2026-03-31T08:20:00.000Z",
+      "eindISO": "2026-03-31T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - V1H",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 31-03-2026",
+      "startISO": "2026-03-31T09:10:00.000Z",
+      "eindISO": "2026-03-31T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 pvtt - M4GT_pvttE0",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 31-03-2026",
+      "startISO": "2026-03-31T10:30:00.000Z",
+      "eindISO": "2026-03-31T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 pvtt - M4GT_pvttE0",
+      "tijd": "11:20 - 12:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 31-03-2026",
+      "startISO": "2026-03-31T11:20:00.000Z",
+      "eindISO": "2026-03-31T12:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "12:20 - 14:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 31-03-2026",
+      "startISO": "2026-03-31T12:20:00.000Z",
+      "eindISO": "2026-03-31T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 01-04-2026",
+      "startISO": "2026-04-01T06:25:00.000Z",
+      "eindISO": "2026-04-01T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 01-04-2026",
+      "startISO": "2026-04-01T07:15:00.000Z",
+      "eindISO": "2026-04-01T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - M1H_tnB0",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 01-04-2026",
+      "startISO": "2026-04-01T08:20:00.000Z",
+      "eindISO": "2026-04-01T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - M1H_tnB0",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 01-04-2026",
+      "startISO": "2026-04-01T09:10:00.000Z",
+      "eindISO": "2026-04-01T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "7 straks - V1E",
+      "tijd": "12:20 - 13:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 01-04-2026",
+      "startISO": "2026-04-01T12:20:00.000Z",
+      "eindISO": "2026-04-01T13:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1B",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "do 02-04-2026",
+      "startISO": "2026-04-02T10:30:00.000Z",
+      "eindISO": "2026-04-02T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "8 coa - M4GT_coa 8",
+      "tijd": "13:10 - 14:00",
+      "lokaal": "G05",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "do 02-04-2026",
+      "startISO": "2026-04-02T13:10:00.000Z",
+      "eindISO": "2026-04-02T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Goede Vrijdag",
+      "tijd": "00:00 - 00:00",
+      "lokaal": "St. Chr. Voortgezet Onderwijs \\, Jan Arentsz\\, Mandenmakerstraat\\,",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T00:00:00.000Z",
+      "eindISO": "2026-04-04T00:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T06:25:00.000Z",
+      "eindISO": "2026-04-03T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "1 straks - V1C",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T06:25:00.000Z",
+      "eindISO": "2026-04-03T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T07:15:00.000Z",
+      "eindISO": "2026-04-03T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - V1L",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T08:20:00.000Z",
+      "eindISO": "2026-04-03T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - V1L",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T09:10:00.000Z",
+      "eindISO": "2026-04-03T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1E",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T10:30:00.000Z",
+      "eindISO": "2026-04-03T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 straks - V1E",
+      "tijd": "11:20 - 12:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 03-04-2026",
+      "startISO": "2026-04-03T11:20:00.000Z",
+      "eindISO": "2026-04-03T12:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Tweede Paasdag",
+      "tijd": "00:00 - 00:00",
+      "lokaal": "St. Chr. Voortgezet Onderwijs \\, Jan Arentsz\\, Mandenmakerstraat\\,",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 06-04-2026",
+      "startISO": "2026-04-06T00:00:00.000Z",
+      "eindISO": "2026-04-07T00:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "11:20 - 14:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "ma 06-04-2026",
+      "startISO": "2026-04-06T11:20:00.000Z",
+      "eindISO": "2026-04-06T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - V1H",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 07-04-2026",
+      "startISO": "2026-04-07T08:20:00.000Z",
+      "eindISO": "2026-04-07T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - V1H",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 07-04-2026",
+      "startISO": "2026-04-07T09:10:00.000Z",
+      "eindISO": "2026-04-07T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 pvtt - M4GT_pvttE0",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 07-04-2026",
+      "startISO": "2026-04-07T10:30:00.000Z",
+      "eindISO": "2026-04-07T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 pvtt - M4GT_pvttE0",
+      "tijd": "11:20 - 12:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 07-04-2026",
+      "startISO": "2026-04-07T11:20:00.000Z",
+      "eindISO": "2026-04-07T12:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "12:20 - 14:00",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "di 07-04-2026",
+      "startISO": "2026-04-07T12:20:00.000Z",
+      "eindISO": "2026-04-07T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T06:25:00.000Z",
+      "eindISO": "2026-04-08T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T07:15:00.000Z",
+      "eindISO": "2026-04-08T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - M1H_tnB0",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T08:20:00.000Z",
+      "eindISO": "2026-04-08T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - M1H_tnB0",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T09:10:00.000Z",
+      "eindISO": "2026-04-08T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "7 straks - V1E",
+      "tijd": "12:20 - 13:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T12:20:00.000Z",
+      "eindISO": "2026-04-08T13:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1B",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "do 09-04-2026",
+      "startISO": "2026-04-09T10:30:00.000Z",
+      "eindISO": "2026-04-09T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "8 coa - M4GT_coa 8",
+      "tijd": "13:10 - 14:00",
+      "lokaal": "G05",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "do 09-04-2026",
+      "startISO": "2026-04-09T13:10:00.000Z",
+      "eindISO": "2026-04-09T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "1 straks - V1C",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T06:25:00.000Z",
+      "eindISO": "2026-04-10T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T06:25:00.000Z",
+      "eindISO": "2026-04-10T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T07:15:00.000Z",
+      "eindISO": "2026-04-10T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - V1L",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T08:20:00.000Z",
+      "eindISO": "2026-04-10T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - V1L",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T09:10:00.000Z",
+      "eindISO": "2026-04-10T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1E",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T10:30:00.000Z",
+      "eindISO": "2026-04-10T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "6 straks - V1E",
+      "tijd": "11:20 - 12:10",
+      "lokaal": "G06",
+      "groep": "Gebruik Magister om op roosterwijzigingen te controleren en om",
+      "datum": "vr 10-04-2026",
+      "startISO": "2026-04-10T11:20:00.000Z",
+      "eindISO": "2026-04-10T12:10:00.000Z",
+      "bron": "magister"
+    }
+  ],
   "fouten": {
-    "eduflex": "Nog niet opgehaald",
-    "magister": "Nog niet opgehaald"
+    "eduflex": "Geen iCal link ingesteld"
   }
 }
