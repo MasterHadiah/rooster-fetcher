@@ -65,23 +65,26 @@ function parseEduflex(html) {
     const pr = /'(\w+)':'([^']*)'/g;
     while ((pm = pr.exec(propsStr)) !== null) props[pm[1]] = pm[2];
 
-   // Tijden uit Eduflex zijn lokale Nederlandse tijd (geen UTC conversie nodig)
-    // Gebruik de uren direct als strings om tijdzone problemen te vermijden
+    // Tijden uit Eduflex zijn lokale Nederlandse tijd
     const startStr = `${String(+hr).padStart(2,'0')}:${String(+mn).padStart(2,'0')}`;
     const eindMs   = (+hr * 60 + +mn) * 60000 + +dur;
     const eindH    = Math.floor(eindMs / 3600000);
     const eindM    = Math.floor((eindMs % 3600000) / 60000);
     const eindStr  = `${String(eindH).padStart(2,'0')}:${String(eindM).padStart(2,'0')}`;
 
-    // Bouw datum string direct zonder Date object
-    const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    // Bouw datum string
     const dagen   = ['zo','ma','di','wo','do','vr','za'];
     const dagNr   = new Date(+yr, +mo, +dy).getDay();
     const datumStr = `${dagen[dagNr]} ${String(+dy).padStart(2,'0')}-${String(+mo+1).padStart(2,'0')}-${yr}`;
 
-    // ISO string zonder tijdzone shift: behandel als UTC met de exacte uren
-    const startISO = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${startStr}:00.000Z`;
-    const eindISO  = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${eindStr}:00.000Z`;
+    // 🔧 FIX: Gebruik Date.UTC zodat de tijden correct blijven
+    // De parameters (yr, mo, dy, hr, mn) zijn de lokale Nederlandse tijd
+    // Date.UTC behandelt ze alsof het UTC is, waardoor er geen verschuiving optreedt
+    const startDateUTC = new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn));
+    const endDateUTC = new Date(startDateUTC.getTime() + +dur);
+    
+    const startISO = startDateUTC.toISOString();
+    const eindISO = endDateUTC.toISOString();
 
     const vak  = props.cpVak       || null;
     const attr = props.cpAttribuut || null;
@@ -152,7 +155,6 @@ async function getEduflex() {
     });
 
     // Wacht tot het rooster geladen is
-  // Wacht tot het rooster geladen is
     try {
       await page.waitForFunction(
         () => document.body.innerHTML.includes('AddAppointment'),
@@ -162,7 +164,6 @@ async function getEduflex() {
     } catch(e) {
       console.warn('   ⚠️ Timeout - AddAppointment niet gevonden, pagina titel:', await page.title());
       console.log('   Pagina URL:', page.url());
-      // Screenshot voor debug
     }
 
     const html1 = await page.content();
@@ -171,7 +172,8 @@ async function getEduflex() {
     const aptIdx = html1.indexOf('AddAppointment');
     console.log('   AddAppointment context:', html1.slice(aptIdx - 20, aptIdx + 100));
     const aptIdx2 = html1.indexOf('AddAppointment("0"');
-    console.log('   Volledige apt0:', html1.slice(aptIdx2, aptIdx2 + 400)); const week1 = parseEduflex(html1);
+    console.log('   Volledige apt0:', html1.slice(aptIdx2, aptIdx2 + 400)); 
+    const week1 = parseEduflex(html1);
     console.log(`   Week 1 (huidig): ${week1.length} items`);
 
     // Stap 3: Navigeer naar volgende week
