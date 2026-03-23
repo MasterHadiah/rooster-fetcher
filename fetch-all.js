@@ -77,14 +77,14 @@ function parseEduflex(html) {
     const dagNr   = new Date(+yr, +mo, +dy).getDay();
     const datumStr = `${dagen[dagNr]} ${String(+dy).padStart(2,'0')}-${String(+mo+1).padStart(2,'0')}-${yr}`;
 
-    // 🔧 FIX: Gebruik Date.UTC zodat de tijden correct blijven
-    // De parameters (yr, mo, dy, hr, mn) zijn de lokale Nederlandse tijd
-    // Date.UTC behandelt ze alsof het UTC is, waardoor er geen verschuiving optreedt
-    const startDateUTC = new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn));
-    const endDateUTC = new Date(startDateUTC.getTime() + +dur);
+    // FIX: Converteer lokale tijd naar UTC zonder verschuiving
+    const lokaleStart = new Date(+yr, +mo, +dy, +hr, +mn);
+    const timezoneOffset = lokaleStart.getTimezoneOffset() * 60000;
+    const utcStart = new Date(lokaleStart.getTime() - timezoneOffset);
+    const utcEind = new Date(utcStart.getTime() + +dur);
     
-    const startISO = startDateUTC.toISOString();
-    const eindISO = endDateUTC.toISOString();
+    const startISO = utcStart.toISOString();
+    const eindISO = utcEind.toISOString();
 
     const vak  = props.cpVak       || null;
     const attr = props.cpAttribuut || null;
