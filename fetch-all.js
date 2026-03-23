@@ -218,6 +218,7 @@ async function getEduflex() {
     return r;
   }
 
+  let postLocation = null;
   await new Promise((resolve, reject) => {
     const req = https.request({
       hostname: 'web.eduflexcloud.nl',
@@ -230,6 +231,7 @@ async function getEduflex() {
       }
     }, res => {
       parseCookies(res.headers, jar);
+      postLocation = res.headers.location || null;
       const location = res.headers.location;
       res.on('data', () => {});
       res.on('end', async () => {
@@ -247,6 +249,8 @@ async function getEduflex() {
     req.end();
   });
 
+  console.log('   POST status cookies na login:', Object.keys(jar).join(', '));
+  console.log('   POST redirect location was:', postLocation);
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
   // 4. GET rooster page
