@@ -21,6 +21,17 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install Chromium dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libatk-bridge2.0-0 libatk1.0-0 libcups2 libdrm2 libgbm1 \
+            libnss3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+            libxss1 libxtst6 fonts-liberation xdg-utils
+
+      - name: Install Node dependencies
+        run: npm install
+
       - name: Rooster ophalen
         env:
           EDUFLEX_USER: ${{ secrets.EDUFLEX_USER }}
