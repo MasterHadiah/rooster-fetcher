@@ -187,7 +187,10 @@ async function getEduflex() {
   const bField = r1.body.match(/name="([^"]*(?:btnLogin|login)[^"]*)"[^>]*type="submit"/i)?.[1]
               || r1.body.match(/type="submit"[^>]*name="([^"]*(?:btnLogin|login)[^"]*)"/i)?.[1]
               || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
-
+  
+  console.log(`   Login velden: user="${uField}", pass="${pField}", btn="${bField}"`);
+  console.log(`   VIEWSTATE aanwezig: ${vs.length > 0}`);
+  
   // 3. POST login — follow all redirects, collect cookies at every hop
   const loginData = new URLSearchParams({
     '__VIEWSTATE': vs, '__VIEWSTATEGENERATOR': vsg, '__EVENTVALIDATION': ev,
