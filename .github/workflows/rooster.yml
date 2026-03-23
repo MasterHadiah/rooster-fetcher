@@ -22,7 +22,7 @@ jobs:
           node-version: '20'
 
       - name: Rooster ophalen
-        run: node scripts/fetch-all.js
+        run: node fetch-all.js
 
       - name: Commit en push rooster.json
         run: |
