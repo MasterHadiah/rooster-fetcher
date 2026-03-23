@@ -255,7 +255,8 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
   // 4. GET rooster page
-  const r3 = await getWithCookies('/JA/webma/Pages/DocentRooster', cookieStr(jar));
+  // 4. GET rooster page — volg redirects
+  const r3 = await getFollowRedirects('/JA/webma/Pages/DocentRooster', 0);
   parseCookies(r3.headers, jar);
 
   const week1 = parseEduflex(r3.body);
