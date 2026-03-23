@@ -1,5 +1,5 @@
 {
-  "bijgewerkt": "2026-03-23T13:47:01.044Z",
+  "bijgewerkt": "2026-03-23T14:06:10.179Z",
   "totaal": 60,
   "afspraken": [
     {
@@ -603,7 +603,5 @@
       "bron": "magister"
     }
   ],
-  "fouten": {
-    "eduflex": "Invalid URL"
-  }
+  "fouten": {}
 }
