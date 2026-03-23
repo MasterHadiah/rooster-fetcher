@@ -35,7 +35,7 @@ function getWithCookies(urlPath, cookieStr) {
   });
 }
 
-function post(urlPath, data, cookieStr) {
+function post(urlPath, data, cookie) {
   return new Promise((resolve, reject) => {
     const postData = typeof data === 'string' ? data : new URLSearchParams(data).toString();
     const opts = {
@@ -45,12 +45,27 @@ function post(urlPath, data, cookieStr) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(postData),
-        'Cookie': cookieStr || '',
+        'Cookie': cookie || '',
       }
     };
     const req = https.request(opts, res => {
       let d = ''; res.on('data', c => d += c);
-      res.on('end', () => resolve({ body: d, headers: res.headers }));
+      res.on('end', () => {
+        // If redirect, follow it with GET and pass along cookies
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          const loc = res.headers.location.startsWith('http')
+            ? res.headers.location
+            : 'https://web.eduflexcloud.nl' + res.headers.location;
+          // Merge new cookies into existing cookie string
+          const newJar = {};
+          parseCookies(res.headers, newJar);
+          const allCookies = cookie + '; ' + cookieStr(newJar);
+          getWithCookies(new URL(loc).pathname + (new URL(loc).search || ''), allCookies)
+            .then(resolve).catch(reject);
+        } else {
+          resolve({ body: d, headers: res.headers });
+        }
+      });
     });
     req.on('error', reject);
     req.write(postData);
