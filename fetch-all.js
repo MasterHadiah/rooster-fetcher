@@ -2,452 +2,284 @@ const fs    = require('fs');
 const path  = require('path');
 const https = require('https');
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Generic HTTPS helpers ─────────────────────────────────────────────────────
 
-function httpsGet(url, options = {}) {
+function get(url) {
   return new Promise((resolve, reject) => {
-    const req = https.get(url.replace('webcal://', 'https://'), options, res => {
-      // Follow redirects
+    https.get(url, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return httpsGet(res.headers.location, options).then(resolve).catch(reject);
+        const loc = res.headers.location.startsWith('http')
+          ? res.headers.location
+          : 'https://web.eduflexcloud.nl' + res.headers.location;
+        return get(loc).then(resolve).catch(reject);
       }
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => resolve(data));
-    });
-    req.on('error', reject);
-    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout')); });
+      let d = ''; res.on('data', c => d += c); res.on('end', () => resolve({ body: d, headers: res.headers }));
+    }).on('error', reject);
   });
 }
 
-function httpsPost(url, postData, headers = {}) {
+function getWithCookies(urlPath, cookieStr) {
   return new Promise((resolve, reject) => {
-    const urlObj = new URL(url);
-    const options = {
-      hostname: urlObj.hostname,
-      path: urlObj.pathname + urlObj.search,
+    const opts = {
+      hostname: 'web.eduflexcloud.nl',
+      path: urlPath,
+      method: 'GET',
+      headers: { 'Cookie': cookieStr }
+    };
+    const req = https.request(opts, res => {
+      let d = ''; res.on('data', c => d += c);
+      res.on('end', () => resolve({ body: d, headers: res.headers }));
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+function post(urlPath, data, cookieStr) {
+  return new Promise((resolve, reject) => {
+    const postData = typeof data === 'string' ? data : new URLSearchParams(data).toString();
+    const opts = {
+      hostname: 'web.eduflexcloud.nl',
+      path: urlPath,
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(postData),
-        ...headers,
-      },
+        'Cookie': cookieStr || '',
+      }
     };
-    const req = https.request(options, res => {
-      let data = '';
-      // Capture cookies from login response
-      resolve({ data: '', headers: res.headers, statusCode: res.statusCode,
-        consume: () => new Promise(r => {
-          res.on('data', c => data += c);
-          res.on('end', () => r(data));
-        })
-      });
-      res.on('data', c => data += c);
-      res.on('end', () => {});
+    const req = https.request(opts, res => {
+      let d = ''; res.on('data', c => d += c);
+      res.on('end', () => resolve({ body: d, headers: res.headers }));
     });
     req.on('error', reject);
-    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout')); });
     req.write(postData);
     req.end();
   });
 }
 
-// ── .NET Ticks → JavaScript Date ──────────────────────────────────────────────
-// .NET ticks: 100-nanosecond intervals since 0001-01-01
-// JavaScript Date: milliseconds since 1970-01-01
-function ticksToDate(ticks) {
-  const TICKS_PER_MS = 10000n;
-  const EPOCH_DIFF_MS = 62135596800000n; // ms between 0001-01-01 and 1970-01-01
-  const ms = BigInt(ticks) / TICKS_PER_MS - EPOCH_DIFF_MS;
-  return new Date(Number(ms));
+function parseCookies(headers, jar = {}) {
+  const raw = headers['set-cookie'] || [];
+  (Array.isArray(raw) ? raw : [raw]).forEach(c => {
+    const [pair] = c.split(';');
+    const idx = pair.indexOf('=');
+    if (idx > 0) jar[pair.slice(0, idx).trim()] = pair.slice(idx + 1).trim();
+  });
+  return jar;
+}
+
+function cookieStr(jar) {
+  return Object.entries(jar).map(([k, v]) => `${k}=${v}`).join('; ');
 }
 
 // ── Parse Magister iCal ───────────────────────────────────────────────────────
-function parseICS(icsText, bron) {
+
+function parseICS(text) {
   const items = [];
-  const events = icsText.split('BEGIN:VEVENT');
-  events.shift();
-
-  events.forEach(event => {
-    const get = (key) => {
-      const match = event.match(new RegExp(key + '[^:]*:(.+)'));
-      return match ? match[1].trim() : null;
-    };
-
-    const summary  = get('SUMMARY');
-    const dtstart  = get('DTSTART');
-    const dtend    = get('DTEND');
-    const location = get('LOCATION');
-
+  text.split('BEGIN:VEVENT').slice(1).forEach(ev => {
+    const get = k => { const m = ev.match(new RegExp(k + '[^:]*:(.+)')); return m ? m[1].trim() : null; };
+    const summary = get('SUMMARY');
     if (!summary) return;
 
-    function parseICSDate(str) {
-      if (!str) return null;
+    function parseDate(s) {
+      if (!s) return null;
       try {
-        const s = str.replace('Z', '').replace(/\r/g, '');
-        if (s.length === 8) {
-          return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T00:00:00`).toISOString();
-        }
-        const datePart = `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
-        const timePart = `${s.slice(9,11)}:${s.slice(11,13)}:${s.slice(13,15)}`;
-        const suffix   = str.endsWith('Z') ? 'Z' : '';
-        return new Date(`${datePart}T${timePart}${suffix}`).toISOString();
+        s = s.replace('Z','').replace(/\r/g,'');
+        if (s.length === 8) return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T00:00:00`).toISOString();
+        return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(9,11)}:${s.slice(11,13)}:${s.slice(13,15)}Z`).toISOString();
       } catch(e) { return null; }
     }
 
-    const startISO = parseICSDate(dtstart);
-    const eindISO  = parseICSDate(dtend);
-    const startDate = startISO ? new Date(startISO) : null;
-    const eindDate  = eindISO  ? new Date(eindISO)  : null;
+    const startISO = parseDate(get('DTSTART'));
+    const eindISO  = parseDate(get('DTEND'));
+    const startD   = startISO ? new Date(startISO) : null;
+    const eindD    = eindISO  ? new Date(eindISO)  : null;
 
     items.push({
       vak:     summary,
-      tijd:    startDate && eindDate
-                 ? `${startDate.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindDate.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`
-                 : null,
-      lokaal:  location || null,
+      tijd:    startD && eindD ? `${startD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}` : null,
+      lokaal:  get('LOCATION'),
       groep:   null,
-      datum:   startDate ? startDate.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}) : null,
-      startISO,
-      eindISO,
-      bron,
+      datum:   startD ? startD.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}) : null,
+      startISO, eindISO,
+      bron:    'magister',
     });
   });
-
   return items;
 }
 
-// ── Parse Eduflex XHR response ────────────────────────────────────────────────
-// The response is a JS callback: s/*DX*/({'id':0,'result':{...'aptsBlock_innerContent':'<div ...>'...}})
-// We extract the AddAppointment calls from the scriptBlock which contain structured data
-function parseEduflexResponse(responseText) {
+// ── Parse Eduflex HTML (AddAppointment calls) ─────────────────────────────────
+
+function parseEduflex(html) {
   const items = [];
-
-  // Extract AddAppointment calls from the scriptBlock
-  // Pattern: dxo.AddAppointment("N", new Date(y,m,d,h,min), durationMs, [...], "", "", ..., ({cpVak:'...', cpKlas:'...', ...}))
-  const aptRegex = /dxo\.AddAppointment\("(\d+)",\s*new Date\((\d+),(\d+),(\d+),(\d+),(\d+)\),\s*(\d+),.*?\(\{([^}]+)\}\)\)/g;
-  let match;
-
-  while ((match = aptRegex.exec(responseText)) !== null) {
-    const [, id, year, month, day, hour, min, durationMs, propsStr] = match;
-
-    // Parse custom properties object: 'cpVak':'nsk1','cpKlas':'V4D',...
+  const re = /dxo\.AddAppointment\("(\d+)",\s*new Date\((\d+),(\d+),(\d+),(\d+),(\d+)\),\s*(\d+),[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\(\{([^}]+)\}\)\)/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const [,, yr, mo, dy, hr, mn, dur, propsStr] = m;
     const props = {};
-    const propRegex = /'(\w+)':'([^']*)'/g;
-    let propMatch;
-    while ((propMatch = propRegex.exec(propsStr)) !== null) {
-      props[propMatch[1]] = propMatch[2];
-    }
+    let pm;
+    const pr = /'(\w+)':'([^']*)'/g;
+    while ((pm = pr.exec(propsStr)) !== null) props[pm[1]] = pm[2];
 
-    // Build start/end dates
-    // month in JS Date is 0-based, and that's what Eduflex sends
-    const startDate = new Date(
-      parseInt(year), parseInt(month), parseInt(day),
-      parseInt(hour), parseInt(min), 0, 0
-    );
-    const eindDate = new Date(startDate.getTime() + parseInt(durationMs));
+    const startD = new Date(+yr, +mo, +dy, +hr, +mn);
+    const eindD  = new Date(startD.getTime() + +dur);
 
-    const startISO = startDate.toISOString();
-    const eindISO  = eindDate.toISOString();
-
-    // Determine description: prefer vak, fall back to attribuut
-    const vak      = props.cpVak      || null;
-    const attribuut= props.cpAttribuut|| null;
-    const lokaal   = props.cpLokaal   || null;
-    const klas     = props.cpKlas     || null;
-    const kleur    = props.cpKleur    || null;
-
-    // Skip if completely empty
-    if (!vak && !attribuut) continue;
-
-    const label = vak
-      ? (attribuut ? `${vak} (${attribuut})` : vak)
-      : `Extra code: ${attribuut}`;
+    const vak  = props.cpVak  || null;
+    const attr = props.cpAttribuut || null;
+    if (!vak && !attr) continue;
 
     items.push({
-      vak:     label,
-      tijd:    `${startDate.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindDate.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`,
-      lokaal:  lokaal || null,
-      groep:   klas   || null,
-      datum:   startDate.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
-      startISO,
-      eindISO,
-      kleur:   kleur  || null,
+      vak:     vak ? (attr ? `${vak} (${attr})` : vak) : `Extra: ${attr}`,
+      tijd:    `${startD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`,
+      lokaal:  props.cpLokaal || null,
+      groep:   props.cpKlas   || null,
+      datum:   startD.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
+      startISO: startD.toISOString(),
+      eindISO:  eindD.toISOString(),
+      kleur:   props.cpKleur  || null,
       bron:    'eduflex',
     });
   }
-
   return items;
 }
 
 // ── Fetch Eduflex ─────────────────────────────────────────────────────────────
-async function getEduflexRooster() {
-  const username = process.env.EDUFLEX_USER;
-  const password = process.env.EDUFLEX_PASS;
 
-  if (!username || !password) throw new Error('EDUFLEX_USER and EDUFLEX_PASS required');
-
-  const HOST     = 'web.eduflexcloud.nl';
-  const BASE     = `https://${HOST}`;
-  const LOGIN    = `${BASE}/JA/webma/Pages/Default`;
-  const ROOSTER  = `${BASE}/JA/webma/Pages/DocentRooster`;
+async function getEduflex() {
+  const user = process.env.EDUFLEX_USER;
+  const pass = process.env.EDUFLEX_PASS;
+  if (!user || !pass) throw new Error('Geen credentials');
 
   console.log('🔑 Eduflex: inloggen...');
+  const jar = {};
 
-  // Step 1: GET login page to get __VIEWSTATE and cookies
-  const loginPageRaw = await httpsGet(LOGIN);
+  // 1. GET login page
+  const r1 = await getWithCookies('/JA/webma/Pages/Default', '');
+  parseCookies(r1.headers, jar);
 
-  // Extract hidden fields
-  const getHidden = (name) => {
-    const m = loginPageRaw.match(new RegExp(`name="${name}"[^>]*value="([^"]*)"`, 'i'))
-           || loginPageRaw.match(new RegExp(`id="${name}"[^>]*value="([^"]*)"`, 'i'));
-    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
-  };
+  // 2. Extract hidden fields
+  const vs  = r1.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
+  const vsg = r1.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
+  const ev  = r1.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
 
-  // Extract cookies from login page response
-  // We need to do a real cookie-aware session — use a simple cookie jar
-  const cookieJar = {};
+  // Find field names by looking for text input fields
+  const uField = r1.body.match(/name="([^"]*(?:gebruiker|username)[^"]*)"[^>]*type="text"/i)?.[1]
+              || r1.body.match(/type="text"[^>]*name="([^"]*(?:gebruiker|username)[^"]*)"/i)?.[1]
+              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtGebruikersnaam';
+  const pField = r1.body.match(/name="([^"]*(?:wachtwoord|password)[^"]*)"[^>]*type="password"/i)?.[1]
+              || r1.body.match(/type="password"[^>]*name="([^"]*(?:wachtwoord|password)[^"]*)"/i)?.[1]
+              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtWachtwoord';
+  const bField = r1.body.match(/name="([^"]*(?:btnLogin|login)[^"]*)"[^>]*type="submit"/i)?.[1]
+              || r1.body.match(/type="submit"[^>]*name="([^"]*(?:btnLogin|login)[^"]*)"/i)?.[1]
+              || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
 
-  const extractCookies = (setCookieHeaders) => {
-    if (!setCookieHeaders) return;
-    const headers = Array.isArray(setCookieHeaders) ? setCookieHeaders : [setCookieHeaders];
-    headers.forEach(c => {
-      const [pair] = c.split(';');
-      const [name, val] = pair.split('=');
-      if (name) cookieJar[name.trim()] = (val || '').trim();
-    });
-  };
+  // 3. POST login
+  const loginData = new URLSearchParams({
+    '__VIEWSTATE': vs, '__VIEWSTATEGENERATOR': vsg, '__EVENTVALIDATION': ev,
+    [uField]: user, [pField]: pass, [bField]: 'Inloggen',
+  }).toString();
 
-  const cookieString = () => Object.entries(cookieJar).map(([k,v]) => `${k}=${v}`).join('; ');
-
-  // GET login page and capture cookies
-  await new Promise((resolve, reject) => {
-    https.get(LOGIN, res => {
-      extractCookies(res.headers['set-cookie']);
-      let d = ''; res.on('data', c => d += c); res.on('end', () => resolve(d));
-    }).on('error', reject);
-  });
-
-  // Re-fetch login page with cookies to get VIEWSTATE
-  let loginHtml = '';
-  await new Promise((resolve, reject) => {
-    const options = { headers: { 'Cookie': cookieString() } };
-    https.get(LOGIN, options, res => {
-      extractCookies(res.headers['set-cookie']);
-      let d = ''; res.on('data', c => d += c); res.on('end', () => { loginHtml = d; resolve(); });
-    }).on('error', reject);
-  });
-
-  const viewstate = loginHtml.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
-  const vsg = loginHtml.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
-  const evval = loginHtml.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
-
-  // Find the username/password field names
-  const userField = loginHtml.match(/id="[^"]*(?:gebruikersnaam|gebruiker|username|user)[^"]*"\s+name="([^"]*)"/i)?.[1]
-                 || loginHtml.match(/name="([^"]*(?:gebruikersnaam|gebruiker|username|user)[^"]*)"/i)?.[1]
-                 || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtGebruikersnaam';
-  const passField = loginHtml.match(/id="[^"]*(?:wachtwoord|password|pass)[^"]*"\s+name="([^"]*)"/i)?.[1]
-                 || loginHtml.match(/name="([^"]*(?:wachtwoord|password|pass)[^"]*)"/i)?.[1]
-                 || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$txtWachtwoord';
-  const btnField  = loginHtml.match(/id="[^"]*(?:btnLogin|login|submit)[^"]*"\s+name="([^"]*)"/i)?.[1]
-                 || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
-
-  // Step 2: POST login
-  const params = new URLSearchParams({
-    '__VIEWSTATE':          viewstate,
-    '__VIEWSTATEGENERATOR': vsg,
-    '__EVENTVALIDATION':    evval,
-    [userField]:            username,
-    [passField]:            password,
-    [btnField]:             'Inloggen',
-  });
-
-  await new Promise((resolve, reject) => {
-    const postData = params.toString();
-    const req = https.request({
-      hostname: HOST,
-      path: '/JA/webma/Pages/Default',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(postData),
-        'Cookie': cookieString(),
-      }
-    }, res => {
-      extractCookies(res.headers['set-cookie']);
-      let d = ''; res.on('data', c => d += c); res.on('end', () => resolve(d));
-    });
-    req.on('error', reject);
-    req.write(postData);
-    req.end();
-  });
+  const r2 = await post('/JA/webma/Pages/Default', loginData, cookieStr(jar));
+  parseCookies(r2.headers, jar);
 
   console.log('✅ Eduflex: ingelogd');
 
-  // Step 3: GET DocentRooster page to get its VIEWSTATE
-  let roosterHtml = '';
-  await new Promise((resolve, reject) => {
-    https.get(ROOSTER, { headers: { 'Cookie': cookieString() } }, res => {
-      extractCookies(res.headers['set-cookie']);
-      let d = ''; res.on('data', c => d += c); res.on('end', () => { roosterHtml = d; resolve(); });
-    }).on('error', reject);
-  });
+  // 4. GET rooster page
+  const r3 = await getWithCookies('/JA/webma/Pages/DocentRooster', cookieStr(jar));
+  parseCookies(r3.headers, jar);
 
-  const allItems = [];
+  const week1 = parseEduflex(r3.body);
+  console.log(`   Week 1: ${week1.length} items`);
 
-  // Step 4: Fetch 2 weeks of data via POST (same as browser does on navigation)
-  // The browser does a callback POST to get appointment data for each visible week
-  // We can also just parse what's already in the initial page HTML
+  // 5. Try week 2 via next-week navigation
+  // Extract scheduler state for callback
+  const cbState = r3.body.match(/'callbackState':'([^']+)'/)?.[1] || '';
+  const schedulerId = r3.body.match(/ASPx\.createControl\(ASPxClientScheduler,'([^']+)'/)?.[1]
+                   || 'ctl00_ctl00_ContentBody_ContentBody_Rooster_mySchedule';
 
-  // Parse initial week from roosterHtml
-  const initialItems = parseEduflexResponse(roosterHtml);
-  console.log(`   Week 1: ${initialItems.length} Eduflex items`);
-  allItems.push(...initialItems);
+  const rvs  = r3.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
+  const rvsg = r3.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
+  const rev  = r3.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
 
-  // Try to navigate to next week via POST callback
+  // Compute next Monday
+  const today = new Date();
+  const daysUntilNextMon = (8 - today.getDay()) % 7 || 7;
+  const nextMon = new Date(today); nextMon.setDate(today.getDate() + daysUntilNextMon);
+  nextMon.setHours(8, 0, 0, 0);
+
+  let week2 = [];
   try {
-    const rvs   = roosterHtml.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
-    const rvsg  = roosterHtml.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
-    const revval= roosterHtml.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
+    const cbData = new URLSearchParams({
+      '__VIEWSTATE': rvs, '__VIEWSTATEGENERATOR': rvsg, '__EVENTVALIDATION': rev,
+      '__CALLBACKID': schedulerId,
+      '__CALLBACKPARAM': `c0:KV|8;AV|${nextMon.getTime()};`,
+    }).toString();
 
-    // Find the scheduler control name
-    const schedulerName = roosterHtml.match(/ASPx\.GetControlCollection\(\)\.GetByName\('([^']+)'\)/)?.[1] || 'mySchedule';
-    const schedulerId   = roosterHtml.match(/ASPxClientScheduler[^,]*,'([^']+mySchedule[^']+)'/)?.[1]
-                       || 'ctl00_ctl00_ContentBody_ContentBody_Rooster_mySchedule';
-
-    // Get visible days to compute next week
-    const visibleDays = [...roosterHtml.matchAll(/'(\d+\/\d+\/\d+)'/g)].map(m => m[1]).slice(0, 5);
-    if (visibleDays.length > 0) {
-      // Parse last visible day and add 3 days (skip weekend) to get to next Monday
-      const lastDay = visibleDays[visibleDays.length - 1].split('/');
-      const nextMonday = new Date(parseInt(lastDay[2]), parseInt(lastDay[1])-1, parseInt(lastDay[0]) + 3);
-      const nextMondayMs = nextMonday.getTime();
-
-      const callbackParams = new URLSearchParams({
-        '__VIEWSTATE':          rvs,
-        '__VIEWSTATEGENERATOR': rvsg,
-        '__EVENTVALIDATION':    revval,
-        '__CALLBACKID':         schedulerId,
-        '__CALLBACKPARAM':      `c0:{"command":"GotoDate","date":${nextMondayMs}}`,
-      });
-
-      const nextWeekData = await new Promise((resolve, reject) => {
-        const postData = callbackParams.toString();
-        const req = https.request({
-          hostname: HOST,
-          path: '/JA/webma/Pages/DocentRooster',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(postData),
-            'Cookie': cookieString(),
-            'X-Requested-With': 'XMLHttpRequest',
-          }
-        }, res => {
-          let d = ''; res.on('data', c => d += c); res.on('end', () => resolve(d));
-        });
-        req.on('error', reject);
-        req.write(postData);
-        req.end();
-      });
-
-      const week2Items = parseEduflexResponse(nextWeekData);
-      console.log(`   Week 2: ${week2Items.length} Eduflex items`);
-      allItems.push(...week2Items);
-    }
+    const r4 = await post('/JA/webma/Pages/DocentRooster', cbData, cookieStr(jar));
+    week2 = parseEduflex(r4.body);
+    console.log(`   Week 2: ${week2.length} items`);
   } catch(e) {
-    console.warn('⚠️  Week 2 ophalen mislukt:', e.message);
+    console.warn('   Week 2 overgeslagen:', e.message);
   }
 
-  // Deduplicate by startISO + vak
+  const all = [...week1, ...week2];
+  // Deduplicate
   const seen = new Set();
-  const deduped = allItems.filter(item => {
-    const key = `${item.startISO}|${item.vak}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
+  return all.filter(i => {
+    const k = `${i.startISO}|${i.vak}`;
+    return seen.has(k) ? false : seen.add(k);
   });
-
-  console.log(`✅ Eduflex totaal: ${deduped.length} afspraken`);
-  return deduped;
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
+
 async function main() {
   console.log('🚀 Rooster fetcher gestart\n');
 
-  const MAGISTER_ICAL = 'webcal://calendar.magister.net/api/icalendar/feeds/6e10ca93-b89c-470a-9a72-a5edaf092995';
+  const MAGISTER_ICAL = 'https://calendar.magister.net/api/icalendar/feeds/6e10ca93-b89c-470a-9a72-a5edaf092995';
 
-  let items  = [];
-  let fouten = {};
+  let magisterItems = [], eduflexItems = [];
+  const fouten = {};
 
-  // Magister iCal
+  // Magister
   try {
     console.log('📅 Magister iCal ophalen...');
-    const ics = await httpsGet(MAGISTER_ICAL);
-    const magisterItems = parseICS(ics, 'magister');
+    const { body } = await get(MAGISTER_ICAL);
+    magisterItems = parseICS(body);
     console.log(`✅ Magister: ${magisterItems.length} afspraken`);
-    items.push(...magisterItems);
-  } catch (err) {
-    console.error('❌ Magister mislukt:', err.message);
-    fouten.magister = err.message;
+  } catch(e) {
+    console.error('❌ Magister mislukt:', e.message);
+    fouten.magister = e.message;
   }
 
   // Eduflex
-  if (process.env.EDUFLEX_USER && process.env.EDUFLEX_PASS) {
-    try {
-      const eduflexItems = await getEduflexRooster();
-      items.push(...eduflexItems);
-    } catch (err) {
-      console.error('❌ Eduflex mislukt:', err.message);
-      fouten.eduflex = err.message;
-    }
-  } else {
-    console.log('ℹ️  Geen Eduflex credentials, overgeslagen');
-    fouten.eduflex = 'Geen credentials';
+  try {
+    eduflexItems = await getEduflex();
+    console.log(`✅ Eduflex totaal: ${eduflexItems.length} afspraken`);
+  } catch(e) {
+    console.error('❌ Eduflex mislukt:', e.message);
+    fouten.eduflex = e.message;
   }
 
-  // Dedup Magister vs Eduflex: als dezelfde les in beide zit, bewaar Eduflex versie
-  // (want Eduflex heeft meer info zoals kleur en attribuut)
-  const magisterKeys = new Set();
-  const eduflex = items.filter(i => i.bron === 'eduflex');
-  eduflex.forEach(i => {
-    // Key: rounded start time (within 10 min) + vak
-    if (i.startISO) {
-      const rounded = Math.round(new Date(i.startISO).getTime() / 600000);
-      magisterKeys.add(`${rounded}|${(i.vak||'').split(' ')[0].toLowerCase()}`);
-    }
-  });
+  // Merge: prefer Eduflex for duplicate lessons
+  const eduKeys = new Set(eduflexItems.map(i => {
+    if (!i.startISO) return null;
+    return `${Math.round(new Date(i.startISO).getTime()/600000)}|${(i.vak||'').split(' ')[0].toLowerCase()}`;
+  }).filter(Boolean));
 
-  const magister = items.filter(i => {
-    if (i.bron !== 'magister') return true;
+  const magFiltered = magisterItems.filter(i => {
     if (!i.startISO) return true;
-    const rounded = Math.round(new Date(i.startISO).getTime() / 600000);
-    const key = `${rounded}|${(i.vak||'').split(' ')[0].toLowerCase()}`;
-    return !magisterKeys.has(key); // exclude if Eduflex has same lesson
+    const k = `${Math.round(new Date(i.startISO).getTime()/600000)}|${(i.vak||'').split(' ')[0].toLowerCase()}`;
+    return !eduKeys.has(k);
   });
 
-  const combined = [...eduflex, ...magister].sort((a, b) => {
-    if (a.startISO && b.startISO) return a.startISO.localeCompare(b.startISO);
-    if (a.startISO) return -1;
-    if (b.startISO) return 1;
-    return 0;
-  });
+  const combined = [...eduflexItems, ...magFiltered].sort((a, b) =>
+    (a.startISO || '').localeCompare(b.startISO || '')
+  );
 
-  const output = {
-    bijgewerkt: new Date().toISOString(),
-    totaal:     combined.length,
-    afspraken:  combined,
-    fouten,
-  };
-
-  const outputFile = path.join(__dirname, 'rooster.json');
-  fs.writeFileSync(outputFile, JSON.stringify(output, null, 2), 'utf8');
-  console.log(`\n✅ rooster.json geschreven met ${combined.length} afspraken`);
-  console.log(`   Magister: ${magister.length}, Eduflex: ${eduflex.length}`);
+  const output = { bijgewerkt: new Date().toISOString(), totaal: combined.length, afspraken: combined, fouten };
+  fs.writeFileSync(path.join(__dirname, 'rooster.json'), JSON.stringify(output, null, 2), 'utf8');
+  console.log(`\n✅ rooster.json: ${combined.length} afspraken (Eduflex: ${eduflexItems.length}, Magister: ${magFiltered.length})`);
 }
 
-main().catch(err => {
-  console.error('💥 Onverwachte fout:', err);
-  process.exit(1);
-});
+main().catch(err => { console.error('💥', err); process.exit(1); });
