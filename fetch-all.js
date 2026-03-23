@@ -254,22 +254,51 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
 
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
-  // 4. GET rooster page
-  const r3 = await getFollowRedirects('/JA/webma/Pages/DocentRooster', 0);
-  parseCookies(r3.headers, jar);
-  console.log('   Rooster pagina titel:', r3.body.match(/<title>([^<]+)/)?.[1]);
-  console.log('   Rooster pagina lengte:', r3.body.length);
-  console.log('   Bevat DocentRooster form:', r3.body.includes('DocentRooster'));
-  console.log('   Bevat mySchedule:', r3.body.includes('mySchedule'));
-  console.log('   DocentRooster form:', r3.body.substring(r3.body.indexOf('DocentRooster'), r3.body.indexOf('DocentRooster') + 500));
+  // 4. GET rooster — first load the outer page to get its VIEWSTATE,
+  // then POST to trigger the actual scheduler content
+  const r3outer = await getFollowRedirects('/JA/webma/Pages/DocentRooster', 0);
+  parseCookies(r3outer.headers, jar);
+
+  const r3vs   = r3outer.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
+  const r3vsg  = r3outer.body.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]*)"/)?.[1] || '';
+  const r3ev   = r3outer.body.match(/id="__EVENTVALIDATION"\s+value="([^"]*)"/)?.[1] || '';
+
+  console.log('   Outer page VIEWSTATE:', r3vs.length > 0);
+  console.log('   Outer page lengte:', r3outer.body.length);
+
+  // POST to the rooster page with the VIEWSTATE to load the scheduler
+  const r3 = await new Promise((resolve, reject) => {
+    const postData = new URLSearchParams({
+      '__VIEWSTATE': r3vs,
+      '__VIEWSTATEGENERATOR': r3vsg,
+      '__EVENTVALIDATION': r3ev,
+    }).toString();
+    const req = https.request({
+      hostname: 'web.eduflexcloud.nl',
+      path: '/JA/webma/Pages/DocentRooster',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData),
+        'Cookie': cookieStr(jar),
+        'Referer': 'https://web.eduflexcloud.nl/JA/webma/Pages/DocentRooster',
+      }
+    }, res => {
+      parseCookies(res.headers, jar);
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => resolve({ body, headers: res.headers }));
+    });
+    req.on('error', reject);
+    req.write(postData);
+    req.end();
+  });
 
   const week1 = parseEduflex(r3.body);
   console.log(`   Week 1: ${week1.length} items`);
   console.log(`   HTML lengte: ${r3.body.length} tekens`);
   console.log(`   Bevat AddAppointment: ${r3.body.includes('AddAppointment')}`);
-  console.log(`   Bevat dxo: ${r3.body.includes('dxo.')}`);
-  console.log(`   Bevat DocentRooster: ${r3.body.includes('DocentRooster')}`);
-  console.log(`   Eerste 200 tekens: ${r3.body.slice(0,200)}`);
+  console.log(`   Bevat mySchedule: ${r3.body.includes('mySchedule')}`);
 
   // 5. Try week 2 via next-week navigation
   // Extract scheduler state for callback
