@@ -188,16 +188,37 @@ async function getEduflex() {
               || r1.body.match(/type="submit"[^>]*name="([^"]*(?:btnLogin|login)[^"]*)"/i)?.[1]
               || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
 
-  // 3. POST login
+  // 3. POST login — capture cookies directly from redirect response
   const loginData = new URLSearchParams({
     '__VIEWSTATE': vs, '__VIEWSTATEGENERATOR': vsg, '__EVENTVALIDATION': ev,
     [uField]: user, [pField]: pass, [bField]: 'Inloggen',
   }).toString();
 
-  const r2 = await post('/JA/webma/Pages/Default', loginData, cookieStr(jar));
-  parseCookies(r2.headers, jar);
+  await new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'web.eduflexcloud.nl',
+      path: '/JA/webma/Pages/Default',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(loginData),
+        'Cookie': cookieStr(jar),
+      }
+    }, res => {
+      parseCookies(res.headers, jar); // grab session cookies from the redirect
+      res.on('data', () => {});
+      res.on('end', resolve);
+    });
+    req.on('error', reject);
+    req.write(loginData);
+    req.end();
+  });
 
-  console.log('✅ Eduflex: ingelogd');
+  // Follow up with GET to home to finalize session
+  const rHome = await getWithCookies('/JA/webma/Pages/Home', cookieStr(jar));
+  parseCookies(rHome.headers, jar);
+
+  console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
   // 4. GET rooster page
   const r3 = await getWithCookies('/JA/webma/Pages/DocentRooster', cookieStr(jar));
