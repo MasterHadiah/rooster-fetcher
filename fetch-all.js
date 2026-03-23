@@ -219,8 +219,7 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
     return r;
   }
 
-  let postLocation = null;
-  await new Promise((resolve, reject) => {
+  const postResult = await new Promise((resolve, reject) => {
     const req = https.request({
       hostname: 'web.eduflexcloud.nl',
       path: '/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fPages%2fDefault',
@@ -232,37 +231,27 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
       }
     }, res => {
       parseCookies(res.headers, jar);
-      postLocation = res.headers.location || null;
-      const location = res.headers.location;
-     let postBody = '';
-      res.on('data', c => postBody += c);
-      res.on('end', async () => {
-        console.log('   POST response status:', res.statusCode);
-        console.log('   POST response body:', postBody.slice(0, 400));
-        if (postLocation) {
-          const loc = postLocation.startsWith('http')
-            ? postLocation.replace('https://web.eduflexcloud.nl', '')
-            : postLocation;
-          try { await getFollowRedirects(loc, 0); } catch(e) {}
-        }
-        resolve();
-      });
-        if (location) {
-          const loc = location.startsWith('http')
-            ? location.replace('https://web.eduflexcloud.nl', '')
-            : location;
-          try { await getFollowRedirects(loc, 0); } catch(e) {}
-        }
-        resolve();
-      });
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => resolve({ status: res.statusCode, location: res.headers.location || null, body }));
     });
     req.on('error', reject);
     req.write(loginData);
     req.end();
   });
 
-  console.log('   POST status cookies na login:', Object.keys(jar).join(', '));
-  console.log('   POST redirect location was:', postLocation);
+  console.log('   POST status:', postResult.status);
+  console.log('   POST location:', postResult.location);
+  console.log('   POST body begin:', postResult.body.slice(0, 300));
+
+  // Follow redirect if present
+  if (postResult.location) {
+    const loc = postResult.location.startsWith('http')
+      ? postResult.location.replace('https://web.eduflexcloud.nl', '')
+      : postResult.location;
+    await getFollowRedirects(loc, 0);
+  }
+
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
   // 4. GET rooster page
