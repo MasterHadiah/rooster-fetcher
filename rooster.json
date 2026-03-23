@@ -1,8 +1,8 @@
 {
-  "bijgewerkt": "2026-03-23T11:57:56.170Z",
+  "bijgewerkt": "2026-03-23T12:30:38.454Z",
   "totaal": 0,
   "afspraken": [],
   "fouten": {
-    "magister": "getaddrinfo ENOTFOUND web.eduflexcloud.nlhttps"
+    "magister": "getaddrinfo ENOTFOUND web.eduflexcloud.nlwebcal"
   }
 }
