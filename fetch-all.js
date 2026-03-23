@@ -188,11 +188,25 @@ async function getEduflex() {
               || r1.body.match(/type="submit"[^>]*name="([^"]*(?:btnLogin|login)[^"]*)"/i)?.[1]
               || 'ctl00$ctl00$ContentBody$ContentBody$LoginControl1$btnLogin';
 
-  // 3. POST login — capture cookies directly from redirect response
+  // 3. POST login — follow all redirects, collect cookies at every hop
   const loginData = new URLSearchParams({
     '__VIEWSTATE': vs, '__VIEWSTATEGENERATOR': vsg, '__EVENTVALIDATION': ev,
     [uField]: user, [pField]: pass, [bField]: 'Inloggen',
   }).toString();
+
+  // Helper: GET that collects cookies and follows redirects
+  async function getFollowRedirects(urlPath, hops) {
+    if (hops > 5) return;
+    const r = await getWithCookies(urlPath, cookieStr(jar));
+    parseCookies(r.headers, jar);
+    if (r.headers.location) {
+      const loc = r.headers.location.startsWith('http')
+        ? r.headers.location.replace('https://web.eduflexcloud.nl', '')
+        : r.headers.location;
+      return getFollowRedirects(loc, hops + 1);
+    }
+    return r;
+  }
 
   await new Promise((resolve, reject) => {
     const req = https.request({
@@ -205,18 +219,23 @@ async function getEduflex() {
         'Cookie': cookieStr(jar),
       }
     }, res => {
-      parseCookies(res.headers, jar); // grab session cookies from the redirect
+      parseCookies(res.headers, jar);
+      const location = res.headers.location;
       res.on('data', () => {});
-      res.on('end', resolve);
+      res.on('end', async () => {
+        if (location) {
+          const loc = location.startsWith('http')
+            ? location.replace('https://web.eduflexcloud.nl', '')
+            : location;
+          try { await getFollowRedirects(loc, 0); } catch(e) {}
+        }
+        resolve();
+      });
     });
     req.on('error', reject);
     req.write(loginData);
     req.end();
   });
-
-  // Follow up with GET to home to finalize session
-  const rHome = await getWithCookies('/JA/webma/Pages/Home', cookieStr(jar));
-  parseCookies(rHome.headers, jar);
 
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
