@@ -255,9 +255,12 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
   console.log('✅ Eduflex: ingelogd, cookies:', Object.keys(jar).join(', '));
 
   // 4. GET rooster page
-  // 4. GET rooster page — volg redirects
   const r3 = await getFollowRedirects('/JA/webma/Pages/DocentRooster', 0);
   parseCookies(r3.headers, jar);
+  console.log('   Rooster pagina titel:', r3.body.match(/<title>([^<]+)/)?.[1]);
+  console.log('   Rooster pagina lengte:', r3.body.length);
+  console.log('   Bevat DocentRooster form:', r3.body.includes('DocentRooster'));
+  console.log('   Bevat mySchedule:', r3.body.includes('mySchedule'));
 
   const week1 = parseEduflex(r3.body);
   console.log(`   Week 1: ${week1.length} items`);
