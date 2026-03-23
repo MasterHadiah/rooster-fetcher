@@ -248,25 +248,38 @@ async function main() {
     fouten.eduflex = e.message;
   }
 
-  // Merge: prefer Eduflex for duplicate lessons
-  const eduKeys = new Set(eduflexItems.map(i => {
+  // 🔧 NIEUWE MERGE LOGICA: Magister heeft voorrang voor lessen
+  // Maak een set van Magister tijden (afgerond op 10 minuten)
+  const magKeys = new Set(magisterItems.map(i => {
     if (!i.startISO) return null;
-    return `${Math.round(new Date(i.startISO).getTime()/600000)}|${(i.vak||'').split(' ')[0].toLowerCase()}`;
+    const startTime = new Date(i.startISO);
+    const roundedMinutes = Math.round(startTime.getMinutes() / 10) * 10;
+    const roundedTime = new Date(startTime);
+    roundedTime.setMinutes(roundedMinutes);
+    return `${roundedTime.getTime()}`;
   }).filter(Boolean));
 
-  const magFiltered = magisterItems.filter(i => {
-    if (!i.startISO) return true;
-    const k = `${Math.round(new Date(i.startISO).getTime()/600000)}|${(i.vak||'').split(' ')[0].toLowerCase()}`;
-    return !eduKeys.has(k);
+  // Filter Eduflex items die NIET overlappen met Magister
+  const eduflexFiltered = eduflexItems.filter(i => {
+    if (!i.startISO) return false;
+    const startTime = new Date(i.startISO);
+    const roundedMinutes = Math.round(startTime.getMinutes() / 10) * 10;
+    const roundedTime = new Date(startTime);
+    roundedTime.setMinutes(roundedMinutes);
+    const timeKey = `${roundedTime.getTime()}`;
+    
+    // Alleen Eduflex tonen als er GEEN Magister les is op dezelfde tijd
+    return !magKeys.has(timeKey);
   });
 
-  const combined = [...eduflexItems, ...magFiltered].sort((a, b) =>
+  // Combineer: alle Magister lessen + Eduflex extra afspraken (die niet overlappen)
+  const combined = [...magisterItems, ...eduflexFiltered].sort((a, b) =>
     (a.startISO || '').localeCompare(b.startISO || '')
   );
 
   const output = { bijgewerkt: new Date().toISOString(), totaal: combined.length, afspraken: combined, fouten };
   fs.writeFileSync(path.join(__dirname, 'rooster.json'), JSON.stringify(output, null, 2), 'utf8');
-  console.log(`\n✅ rooster.json: ${combined.length} afspraken (Eduflex: ${eduflexItems.length}, Magister: ${magFiltered.length})`);
+  console.log(`\n✅ rooster.json: ${combined.length} afspraken (Magister: ${magisterItems.length}, Eduflex extra: ${eduflexFiltered.length})`);
 }
 
 main().catch(err => { console.error('💥', err); process.exit(1); });
