@@ -162,44 +162,79 @@ async function getEduflex() {
       console.log('   ✅ AddAppointment gevonden in pagina');
     } catch(e) {
       console.warn('   ⚠️ Timeout - AddAppointment niet gevonden, pagina titel:', await page.title());
-      console.log('   Pagina URL:', page.url());
     }
 
+    // Week 1 ophalen
     const html1 = await page.content();
-    console.log('   HTML bevat dxo:', html1.includes('dxo.'));
-    console.log('   HTML bevat mySchedule:', html1.includes('mySchedule'));
-    const aptIdx = html1.indexOf('AddAppointment');
-    console.log('   AddAppointment context:', html1.slice(aptIdx - 20, aptIdx + 100));
-    const aptIdx2 = html1.indexOf('AddAppointment("0"');
-    console.log('   Volledige apt0:', html1.slice(aptIdx2, aptIdx2 + 400)); 
     const week1 = parseEduflex(html1);
     console.log(`   Week 1 (huidig): ${week1.length} items`);
 
-    // Stap 3: Navigeer naar volgende week
+    // Week 2 ophalen - verbeterde navigatie
     let week2 = [];
     try {
-      // Klik op de "volgende week" knop
-      const volgendeWeekSelector = [
-        'input[title*="olgende"]',
-        'a[title*="olgende"]',
-        '[id*="next"]',
-        '[id*="Next"]',
-        '[id*="forward"]',
-      ].join(', ');
-
-      await Promise.all([
-        page.waitForFunction(
+      console.log('   🔍 Zoeken naar "volgende week" knop...');
+      
+      // Meerdere mogelijke selectors voor de volgende week knop
+      const mogelijkeSelectors = [
+        'a[title*="Volgende"]',
+        'a[title*="volgende"]',
+        'button[title*="Volgende"]',
+        'button[title*="volgende"]',
+        'span[title*="Volgende"]',
+        'div[title*="Volgende"]',
+        '[aria-label*="Volgende"]',
+        '[aria-label*="volgende"]',
+        '.next',
+        '.dxo-next',
+        '.dx-nav-next',
+        'a:has-text(">")',
+        'button:has-text(">")',
+        'a:has-text("Volgende")',
+        'button:has-text("Volgende")'
+      ];
+      
+      let gevonden = false;
+      for (const selector of mogelijkeSelectors) {
+        const knop = await page.$(selector);
+        if (knop) {
+          console.log(`   ✅ Knop gevonden met selector: ${selector}`);
+          await knop.click();
+          gevonden = true;
+          break;
+        }
+      }
+      
+      if (!gevonden) {
+        // Probeer alternatieve methode: zoek naar alle knoppen en check tekst
+        const alleKnoppen = await page.$$('a, button, span, div');
+        for (const knop of alleKnoppen) {
+          const tekst = await page.evaluate(el => el.textContent || el.title || '', knop);
+          if (tekst.toLowerCase().includes('volgende') || tekst === '>' || tekst === '→') {
+            console.log(`   ✅ Knop gevonden met tekst: ${tekst}`);
+            await knop.click();
+            gevonden = true;
+            break;
+          }
+        }
+      }
+      
+      if (gevonden) {
+        // Wacht tot het rooster ververst is
+        await new Promise(r => setTimeout(r, 3000));
+        
+        // Wacht tot nieuwe AddAppointment calls geladen zijn
+        await page.waitForFunction(
           () => document.body.innerHTML.includes('AddAppointment'),
-          { timeout: 15000 }
-        ).catch(() => {}),
-        page.click(volgendeWeekSelector),
-      ]);
-
-      await new Promise(r => setTimeout(r, 2000)); // even wachten tot rooster ververst
-
-      const html2 = await page.content();
-      week2 = parseEduflex(html2);
-      console.log(`   Week 2 (volgend): ${week2.length} items`);
+          { timeout: 10000 }
+        ).catch(() => console.log('   ⚠️ Timeout wachten op nieuwe data, maar ga verder...'));
+        
+        const html2 = await page.content();
+        week2 = parseEduflex(html2);
+        console.log(`   Week 2 (volgend): ${week2.length} items`);
+      } else {
+        console.log('   ⚠️ Geen "volgende week" knop gevonden, alleen week 1 geladen');
+      }
+      
     } catch(e) {
       console.warn('   Week 2 overgeslagen:', e.message);
     }
@@ -211,7 +246,7 @@ async function getEduflex() {
       return seen.has(k) ? false : seen.add(k);
     });
 
-    console.log(`✅ Eduflex totaal: ${deduped.length} afspraken`);
+    console.log(`✅ Eduflex totaal: ${deduped.length} afspraken (week1: ${week1.length}, week2: ${week2.length})`);
     return deduped;
 
   } finally {
