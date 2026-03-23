@@ -234,8 +234,19 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
       parseCookies(res.headers, jar);
       postLocation = res.headers.location || null;
       const location = res.headers.location;
-      res.on('data', () => {});
+     let postBody = '';
+      res.on('data', c => postBody += c);
       res.on('end', async () => {
+        console.log('   POST response status:', res.statusCode);
+        console.log('   POST response body:', postBody.slice(0, 400));
+        if (postLocation) {
+          const loc = postLocation.startsWith('http')
+            ? postLocation.replace('https://web.eduflexcloud.nl', '')
+            : postLocation;
+          try { await getFollowRedirects(loc, 0); } catch(e) {}
+        }
+        resolve();
+      });
         if (location) {
           const loc = location.startsWith('http')
             ? location.replace('https://web.eduflexcloud.nl', '')
