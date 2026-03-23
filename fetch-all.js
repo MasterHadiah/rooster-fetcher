@@ -153,7 +153,8 @@ async function getEduflex() {
     const html1 = await page.content();
     console.log('   HTML bevat dxo:', html1.includes('dxo.'));
     console.log('   HTML bevat mySchedule:', html1.includes('mySchedule'));
-    console.log('   HTML lengte:', html1.length);
+    const aptIdx = html1.indexOf('AddAppointment');
+    console.log('   AddAppointment context:', html1.slice(aptIdx - 20, aptIdx + 100));
     const week1 = parseEduflex(html1);
     console.log(`   Week 1 (huidig): ${week1.length} items`);
 
