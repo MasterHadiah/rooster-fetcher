@@ -261,6 +261,7 @@ let r1 = await getWithCookies('/JA/webma/Pages/Login?ReturnUrl=%2fJA%2fwebma%2fP
   console.log('   Rooster pagina lengte:', r3.body.length);
   console.log('   Bevat DocentRooster form:', r3.body.includes('DocentRooster'));
   console.log('   Bevat mySchedule:', r3.body.includes('mySchedule'));
+  console.log('   DocentRooster form:', r3.body.substring(r3.body.indexOf('DocentRooster'), r3.body.indexOf('DocentRooster') + 500));
 
   const week1 = parseEduflex(r3.body);
   console.log(`   Week 1: ${week1.length} items`);
