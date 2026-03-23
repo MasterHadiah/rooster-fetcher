@@ -168,9 +168,16 @@ async function getEduflex() {
   console.log('🔑 Eduflex: inloggen...');
   const jar = {};
 
-  // 1. GET login page
-  const r1 = await getWithCookies('/JA/webma/Pages/Default', '');
+ // 1. GET login page — volg eventuele redirect
+  let r1 = await getWithCookies('/JA/webma/Pages/Default', '');
   parseCookies(r1.headers, jar);
+  if (r1.headers.location) {
+    const loc = r1.headers.location.startsWith('http')
+      ? r1.headers.location.replace('https://web.eduflexcloud.nl', '')
+      : r1.headers.location;
+    r1 = await getWithCookies(loc, cookieStr(jar));
+    parseCookies(r1.headers, jar);
+  };
 
   // 2. Extract hidden fields
   const vs  = r1.body.match(/id="__VIEWSTATE"\s+value="([^"]*)"/)?.[1] || '';
