@@ -155,7 +155,8 @@ async function getEduflex() {
     console.log('   HTML bevat mySchedule:', html1.includes('mySchedule'));
     const aptIdx = html1.indexOf('AddAppointment');
     console.log('   AddAppointment context:', html1.slice(aptIdx - 20, aptIdx + 100));
-    const week1 = parseEduflex(html1);
+    const aptIdx2 = html1.indexOf('AddAppointment("0"');
+    console.log('   Volledige apt0:', html1.slice(aptIdx2, aptIdx2 + 400)); const week1 = parseEduflex(html1);
     console.log(`   Week 1 (huidig): ${week1.length} items`);
 
     // Stap 3: Navigeer naar volgende week
