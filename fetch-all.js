@@ -190,6 +190,11 @@ async function getEduflex() {
 
   const week1 = parseEduflex(r3.body);
   console.log(`   Week 1: ${week1.length} items`);
+  console.log(`   HTML lengte: ${r3.body.length} tekens`);
+  console.log(`   Bevat AddAppointment: ${r3.body.includes('AddAppointment')}`);
+  console.log(`   Bevat dxo: ${r3.body.includes('dxo.')}`);
+  console.log(`   Bevat DocentRooster: ${r3.body.includes('DocentRooster')}`);
+  console.log(`   Eerste 200 tekens: ${r3.body.slice(0,200)}`);
 
   // 5. Try week 2 via next-week navigation
   // Extract scheduler state for callback
