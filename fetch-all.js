@@ -65,28 +65,36 @@ function parseEduflex(html) {
     const pr = /'(\w+)':'([^']*)'/g;
     while ((pm = pr.exec(propsStr)) !== null) props[pm[1]] = pm[2];
 
-   // Eduflex tijden zijn lokaal (Amsterdam) — gebruik UTC constructie om tijdzone shift te voorkomen
-    const startD = new Date(Date.UTC(+yr, +mo, +dy, +hr - 1, +mn));
-    const eindD  = new Date(startD.getTime() + +dur);
-
-    const vak  = props.cpVak       || null;
-    const attr = props.cpAttribuut || null;
-    if (!vak && !attr) continue;
-
+   // Tijden uit Eduflex zijn lokale Nederlandse tijd (geen UTC conversie nodig)
+    // Gebruik de uren direct als strings om tijdzone problemen te vermijden
     const startStr = `${String(+hr).padStart(2,'0')}:${String(+mn).padStart(2,'0')}`;
     const eindMs   = (+hr * 60 + +mn) * 60000 + +dur;
     const eindH    = Math.floor(eindMs / 3600000);
     const eindM    = Math.floor((eindMs % 3600000) / 60000);
     const eindStr  = `${String(eindH).padStart(2,'0')}:${String(eindM).padStart(2,'0')}`;
 
+    // Bouw datum string direct zonder Date object
+    const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const dagen   = ['zo','ma','di','wo','do','vr','za'];
+    const dagNr   = new Date(+yr, +mo, +dy).getDay();
+    const datumStr = `${dagen[dagNr]} ${String(+dy).padStart(2,'0')}-${String(+mo+1).padStart(2,'0')}-${yr}`;
+
+    // ISO string zonder tijdzone shift: behandel als UTC met de exacte uren
+    const startISO = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${startStr}:00.000Z`;
+    const eindISO  = `${yr}-${String(+mo+1).padStart(2,'0')}-${String(+dy).padStart(2,'0')}T${eindStr}:00.000Z`;
+
+    const vak  = props.cpVak       || null;
+    const attr = props.cpAttribuut || null;
+    if (!vak && !attr) continue;
+
     items.push({
       vak:     vak ? (attr ? `${vak} (${attr})` : vak) : `Extra: ${attr}`,
       tijd:    `${startStr} - ${eindStr}`,
       lokaal:  props.cpLokaal || null,
       groep:   props.cpKlas   || null,
-      datum:   new Date(+yr, +mo, +dy).toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
-      startISO: new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn)).toISOString(),
-      eindISO:  new Date(Date.UTC(+yr, +mo, +dy, +hr, +mn) + +dur).toISOString(),
+      datum:   datumStr,
+      startISO,
+      eindISO,
       kleur:   props.cpKleur  || null,
       bron:    'eduflex',
     });
