@@ -8,7 +8,7 @@
     { "naam": "Kerstvakantie 2025",     "start": "2025-12-20", "eind": "2026-01-04" },
     { "naam": "Voorjaarsvakantie 2026", "start": "2026-02-21", "eind": "2026-03-01" },
     { "naam": "Meivakantie 2026",       "start": "2026-04-22", "eind": "2026-05-06" },
-    { "naam": "Zomervakantie 2026",     "start": "2026-07-11", "eind": "2026-08-23" }
+    { "naam": "Zomervakantie 2026",     "start": "2026-07-06", "eind": "2026-08-14" }
   ],
   "vrije_dagen": [
     { "naam": "Goede Vrijdag",   "datum": "2026-04-03" },
