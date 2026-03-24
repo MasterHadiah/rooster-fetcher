@@ -293,9 +293,23 @@ function isVakantieOfVrijeDag() {
 async function main() {
   console.log('🚀 Rooster fetcher gestart\n');
 
-  // Sla over tijdens vakanties en vrije dagen
-  if (isVakantieOfVrijeDag()) return;
-
+ 
+// Sla over tijdens vakanties en vrije dagen
+  if (isVakantieOfVrijeDag()) {
+    // Verwijder afspraken van vandaag en later uit rooster.json
+    try {
+      const bestaand = JSON.parse(fs.readFileSync(path.join(__dirname, 'rooster.json'), 'utf8'));
+      const vandaag = new Date().toISOString().slice(0, 10);
+      bestaand.afspraken = bestaand.afspraken.filter(a => 
+        a.startISO && a.startISO.slice(0, 10) < vandaag
+      );
+      bestaand.totaal = bestaand.afspraken.length;
+      bestaand.bijgewerkt = new Date().toISOString();
+      fs.writeFileSync(path.join(__dirname, 'rooster.json'), JSON.stringify(bestaand, null, 2), 'utf8');
+      console.log('🗑️ Toekomstige afspraken verwijderd uit rooster.json');
+    } catch(e) {}
+    return;
+  }
   const MAGISTER_ICAL = 'https://calendar.magister.net/api/icalendar/feeds/6e10ca93-b89c-470a-9a72-a5edaf092995';
 
   let magisterItems = [], eduflexItems = [];
