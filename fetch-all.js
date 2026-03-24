@@ -359,7 +359,31 @@ async function main() {
   });
 
   // Combineer: alle Magister lessen + Eduflex extra afspraken (die niet overlappen)
-  const combined = [...magisterItems, ...eduflexFiltered].sort((a, b) =>
+// Filter afspraken op vakanties en vrije dagen
+  let vrijeDagenSet = new Set();
+  try {
+    const vdata = JSON.parse(fs.readFileSync(path.join(__dirname, 'vakanties.json'), 'utf8'));
+    // Voeg alle vakantiedagen toe
+    for (const v of (vdata.vakanties || [])) {
+      let d = new Date(v.start);
+      const eind = new Date(v.eind);
+      while (d <= eind) {
+        vrijeDagenSet.add(d.toISOString().slice(0, 10));
+        d.setDate(d.getDate() + 1);
+      }
+    }
+    // Voeg losse vrije dagen toe
+    for (const v of (vdata.vrije_dagen || [])) {
+      vrijeDagenSet.add(v.datum);
+    }
+  } catch(e) {}
+
+  const alleItems = [...magisterItems, ...eduflexFiltered].filter(i => {
+    if (!i.startISO) return true;
+    return !vrijeDagenSet.has(i.startISO.slice(0, 10));
+  });
+
+  const combined = alleItems.sort((a, b) =>
     (a.startISO || '').localeCompare(b.startISO || '')
   );
 
