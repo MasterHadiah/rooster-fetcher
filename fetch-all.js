@@ -363,7 +363,7 @@ async function main() {
     console.warn('⚠️  Extra afspraken ophalen mislukt:', e.message);
   }
 
- Magister heeft voorrang voor lessen
+  // 🔧 Magister heeft voorrang voor lessen
   // Maak een set van Magister tijden (afgerond op 10 minuten)
   const magKeys = new Set(magisterItems.map(i => {
     if (!i.startISO) return null;
