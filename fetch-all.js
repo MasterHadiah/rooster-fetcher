@@ -380,7 +380,16 @@ async function main() {
 
   const alleItems = [...magisterItems, ...eduflexFiltered].filter(i => {
     if (!i.startISO) return true;
-    return !vrijeDagenSet.has(i.startISO.slice(0, 10));
+    const datum = i.startISO.slice(0, 10);
+    // Filter vrije dagen en vakanties
+    if (vrijeDagenSet.has(datum)) return false;
+    // Filter afspraken in het verleden
+    const vandaag = new Date(); vandaag.setHours(0,0,0,0);
+    const start = new Date(i.startISO);
+    if (start < vandaag) return false;
+    // Filter afspraken verder dan 14 dagen vooruit
+    const max = new Date(vandaag); max.setDate(vandaag.getDate() + 14);
+    return start <= max;
   });
 
   const combined = alleItems.sort((a, b) =>
