@@ -2,20 +2,17 @@
   "school": "CSG Jan Arentsz",
   "regio": "Noord",
   "vakanties": [
-    { "naam": "Herfstvakantie 2024",    "start": "2024-10-19", "eind": "2024-10-27" },
-    { "naam": "Kerstvakantie 2024",     "start": "2024-12-21", "eind": "2025-01-05" },
-    { "naam": "Voorjaarsvakantie 2025", "start": "2025-02-22", "eind": "2025-03-02" },
-    { "naam": "Meivakantie 2025",       "start": "2025-04-25", "eind": "2025-05-11" },
+   
     { "naam": "Zomervakantie 2025",     "start": "2025-07-12", "eind": "2025-08-24" },
     { "naam": "Herfstvakantie 2025",    "start": "2025-10-18", "eind": "2025-10-26" },
     { "naam": "Kerstvakantie 2025",     "start": "2025-12-20", "eind": "2026-01-04" },
     { "naam": "Voorjaarsvakantie 2026", "start": "2026-02-21", "eind": "2026-03-01" },
-    { "naam": "Meivakantie 2026",       "start": "2026-04-25", "eind": "2026-05-10" },
+    { "naam": "Meivakantie 2026",       "start": "2026-04-22", "eind": "2026-05-06" },
     { "naam": "Zomervakantie 2026",     "start": "2026-07-11", "eind": "2026-08-23" }
   ],
   "vrije_dagen": [
     { "naam": "Goede Vrijdag",   "datum": "2026-04-03" },
-    { "naam": "Koningsdag",      "datum": "2026-04-27" },
+    { "naam": "Studiedag",      "datum": "2026-05-07" },
     { "naam": "Bevrijdingsdag",  "datum": "2026-05-05" },
     { "naam": "Hemelvaartsdag",  "datum": "2026-05-14" },
     { "naam": "Pinksteren",      "datum": "2026-06-01" }
