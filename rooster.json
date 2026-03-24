@@ -1,6 +1,6 @@
 {
-  "bijgewerkt": "2026-03-24T12:06:24.738Z",
-  "totaal": 35,
+  "bijgewerkt": "2026-03-24T13:57:37.892Z",
+  "totaal": 32,
   "afspraken": [
     {
       "vak": "2 ak - M3GT_akD0",
@@ -74,36 +74,14 @@
       "bron": "magister"
     },
     {
-      "vak": "Extra: R_G0",
-      "tijd": "08:15 - 10:10",
-      "lokaal": null,
-      "groep": null,
-      "datum": "wo 25-03-2026",
-      "startISO": "2026-03-25T08:15:00.000Z",
-      "eindISO": "2026-03-25T10:10:00.000Z",
-      "kleur": "ff80ff",
-      "bron": "eduflex"
-    },
-    {
-      "vak": "toets (dyslexie)",
-      "tijd": "11:30 - 13:10",
-      "lokaal": "F14",
-      "groep": null,
-      "datum": "wo 25-03-2026",
-      "startISO": "2026-03-25T11:30:00.000Z",
-      "eindISO": "2026-03-25T13:10:00.000Z",
-      "kleur": "0080c0",
-      "bron": "eduflex"
-    },
-    {
-      "vak": "Extra: R_F1",
-      "tijd": "10:10 - 12:20",
+      "vak": "Extra: verlof",
+      "tijd": "07:25 - 15:50",
       "lokaal": null,
       "groep": null,
       "datum": "do 26-03-2026",
-      "startISO": "2026-03-26T10:10:00.000Z",
-      "eindISO": "2026-03-26T12:20:00.000Z",
-      "kleur": "ff80ff",
+      "startISO": "2026-03-26T07:25:00.000Z",
+      "eindISO": "2026-03-26T15:50:00.000Z",
+      "kleur": "1af94f",
       "bron": "eduflex"
     },
     {
@@ -135,17 +113,6 @@
       "startISO": "2026-03-27T09:20:00.000Z",
       "eindISO": "2026-03-27T10:10:00.000Z",
       "bron": "magister"
-    },
-    {
-      "vak": "Extra: R_G0",
-      "tijd": "11:30 - 13:10",
-      "lokaal": null,
-      "groep": null,
-      "datum": "vr 27-03-2026",
-      "startISO": "2026-03-27T11:30:00.000Z",
-      "eindISO": "2026-03-27T13:10:00.000Z",
-      "kleur": "ff80ff",
-      "bron": "eduflex"
     },
     {
       "vak": "1 pvtt - M4GT_pvttE0",
