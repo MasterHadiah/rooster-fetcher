@@ -334,7 +334,36 @@ async function main() {
     fouten.eduflex = e.message;
   }
 
-  // 🔧 NIEUWE MERGE LOGICA: Magister heeft voorrang voor lessen
+  // Extra afspraken uit database
+  let extraItems = [];
+  try {
+    console.log('📋 Extra afspraken ophalen...');
+    const extraBody = await get('https://ursus.free.nf/api.php?actie=extra_afspraken');
+    const extraData = JSON.parse(extraBody);
+    extraItems = extraData.map(a => {
+      const startISO = `${a.datum}T${a.start_tijd}.000Z`;
+      const eindISO  = a.eind_tijd ? `${a.datum}T${a.eind_tijd}.000Z` : null;
+      const startD   = new Date(startISO);
+      const eindD    = eindISO ? new Date(eindISO) : null;
+      return {
+        vak:     a.naam,
+        tijd:    eindD
+                   ? `${startD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} - ${eindD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`
+                   : startD.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}),
+        lokaal:  a.lokaal || null,
+        groep:   null,
+        datum:   startD.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}),
+        startISO,
+        eindISO,
+        bron:    'extra',
+      };
+    });
+    console.log(`✅ Extra afspraken: ${extraItems.length}`);
+  } catch(e) {
+    console.warn('⚠️  Extra afspraken ophalen mislukt:', e.message);
+  }
+
+ Magister heeft voorrang voor lessen
   // Maak een set van Magister tijden (afgerond op 10 minuten)
   const magKeys = new Set(magisterItems.map(i => {
     if (!i.startISO) return null;
@@ -378,7 +407,7 @@ async function main() {
     }
   } catch(e) {}
 
-  const alleItems = [...magisterItems, ...eduflexFiltered].filter(i => {
+  const alleItems = [...magisterItems, ...eduflexFiltered, ...extraItems].filter(i => {
     if (!i.startISO) return true;
     const datum = i.startISO.slice(0, 10);
     // Filter vrije dagen en vakanties
