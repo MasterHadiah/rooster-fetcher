@@ -254,10 +254,47 @@ async function getEduflex() {
   }
 }
 
+// ── Vakantiecheck (leest vakanties.json) ─────────────────────────────────────
+
+function isVakantieOfVrijeDag() {
+  const vandaag = new Date();
+  vandaag.setHours(0, 0, 0, 0);
+  const vandaagStr = vandaag.toISOString().slice(0, 10);
+
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(path.join(__dirname, 'vakanties.json'), 'utf8'));
+  } catch(e) {
+    console.log('   ℹ️ Geen vakanties.json gevonden, ga gewoon door.');
+    return false;
+  }
+
+  // Check vakanties
+  for (const v of (data.vakanties || [])) {
+    if (vandaagStr >= v.start && vandaagStr <= v.eind) {
+      console.log(`🏖️ Het is ${v.naam} (${v.start} t/m ${v.eind}), script stopt.`);
+      return true;
+    }
+  }
+
+  // Check vrije dagen
+  for (const v of (data.vrije_dagen || [])) {
+    if (vandaagStr === v.datum) {
+      console.log(`📅 Vandaag is een vrije dag: ${v.naam} (${v.datum}), script stopt.`);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
   console.log('🚀 Rooster fetcher gestart\n');
+
+  // Sla over tijdens vakanties en vrije dagen
+  if (isVakantieOfVrijeDag()) return;
 
   const MAGISTER_ICAL = 'https://calendar.magister.net/api/icalendar/feeds/6e10ca93-b89c-470a-9a72-a5edaf092995';
 

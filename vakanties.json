@@ -14,9 +14,10 @@
     { "naam": "Zomervakantie 2026",     "start": "2026-07-11", "eind": "2026-08-23" }
   ],
   "vrije_dagen": [
-    { "naam": "Studiedag",    "datum": "2026-03-27" },
-    { "naam": "Goede Vrijdag","datum": "2026-04-03" },
-    { "naam": "Koningsdag",   "datum": "2026-04-27" },
-    { "naam": "Bevrijdingsdag","datum": "2026-05-05" }
+    { "naam": "Goede Vrijdag",   "datum": "2026-04-03" },
+    { "naam": "Koningsdag",      "datum": "2026-04-27" },
+    { "naam": "Bevrijdingsdag",  "datum": "2026-05-05" },
+    { "naam": "Hemelvaartsdag",  "datum": "2026-05-14" },
+    { "naam": "Pinksteren",      "datum": "2026-06-01" }
   ]
 }
