@@ -1,6 +1,6 @@
 {
-  "bijgewerkt": "2026-03-25T11:23:30.629Z",
-  "totaal": 31,
+  "bijgewerkt": "2026-03-25T12:04:21.316Z",
+  "totaal": 29,
   "afspraken": [
     {
       "vak": "Vierkant rooster",
@@ -31,26 +31,6 @@
       "datum": "vr 27-03-2026",
       "startISO": "2026-03-27T07:25:00.000Z",
       "eindISO": "2026-03-27T08:15:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "2 en - V4A",
-      "tijd": "08:15 - 09:05",
-      "lokaal": "F21",
-      "groep": null,
-      "datum": "vr 27-03-2026",
-      "startISO": "2026-03-27T08:15:00.000Z",
-      "eindISO": "2026-03-27T09:05:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "3 en - V4A",
-      "tijd": "09:20 - 10:10",
-      "lokaal": "F21",
-      "groep": null,
-      "datum": "vr 27-03-2026",
-      "startISO": "2026-03-27T09:20:00.000Z",
-      "eindISO": "2026-03-27T10:10:00.000Z",
       "bron": "magister"
     },
     {
