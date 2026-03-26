@@ -1,17 +1,7 @@
 {
-  "bijgewerkt": "2026-03-25T16:42:47.748Z",
-  "totaal": 15,
+  "bijgewerkt": "2026-03-26T05:43:16.259Z",
+  "totaal": 19,
   "afspraken": [
-    {
-      "vak": "Vierkant rooster",
-      "tijd": "07:25 - 08:15",
-      "lokaal": "meldkamer",
-      "groep": null,
-      "datum": "wo 25-03-2026",
-      "startISO": "2026-03-25T07:25:00.000Z",
-      "eindISO": "2026-03-25T08:15:00.000Z",
-      "bron": "magister"
-    },
     {
       "vak": "Extra: verlof",
       "tijd": "07:25 - 15:50",
@@ -151,6 +141,56 @@
       "datum": "di 07-04-2026",
       "startISO": "2026-04-07T12:20:00.000Z",
       "eindISO": "2026-04-07T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": null,
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T06:25:00.000Z",
+      "eindISO": "2026-04-08T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T07:15:00.000Z",
+      "eindISO": "2026-04-08T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "3 tn - M1H_tnB0",
+      "tijd": "08:20 - 09:10",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T08:20:00.000Z",
+      "eindISO": "2026-04-08T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "4 tn - M1H_tnB0",
+      "tijd": "09:10 - 10:00",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T09:10:00.000Z",
+      "eindISO": "2026-04-08T10:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "7 straks - V1E",
+      "tijd": "12:20 - 13:10",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 08-04-2026",
+      "startISO": "2026-04-08T12:20:00.000Z",
+      "eindISO": "2026-04-08T13:10:00.000Z",
       "bron": "magister"
     }
   ],
