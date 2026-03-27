@@ -1,18 +1,7 @@
 {
-  "bijgewerkt": "2026-03-26T17:36:31.512Z",
-  "totaal": 19,
+  "bijgewerkt": "2026-03-27T05:44:22.228Z",
+  "totaal": 20,
   "afspraken": [
-    {
-      "vak": "Extra: verlof",
-      "tijd": "07:25 - 15:50",
-      "lokaal": null,
-      "groep": null,
-      "datum": "do 26-03-2026",
-      "startISO": "2026-03-26T07:25:00.000Z",
-      "eindISO": "2026-03-26T15:50:00.000Z",
-      "kleur": "1af94f",
-      "bron": "eduflex"
-    },
     {
       "vak": "Vierkant rooster",
       "tijd": "07:25 - 08:15",
@@ -191,6 +180,26 @@
       "datum": "wo 08-04-2026",
       "startISO": "2026-04-08T12:20:00.000Z",
       "eindISO": "2026-04-08T13:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "5 straks - V1B",
+      "tijd": "10:30 - 11:20",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "do 09-04-2026",
+      "startISO": "2026-04-09T10:30:00.000Z",
+      "eindISO": "2026-04-09T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "8 coa - M4GT_coa 8",
+      "tijd": "13:10 - 14:00",
+      "lokaal": "G05",
+      "groep": null,
+      "datum": "do 09-04-2026",
+      "startISO": "2026-04-09T13:10:00.000Z",
+      "eindISO": "2026-04-09T14:00:00.000Z",
       "bron": "magister"
     }
   ],
