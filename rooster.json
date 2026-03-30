@@ -1,6 +1,6 @@
 {
-  "bijgewerkt": "2026-03-30T12:09:57.741Z",
-  "totaal": 35,
+  "bijgewerkt": "2026-03-30T14:07:39.819Z",
+  "totaal": 33,
   "afspraken": [
     {
       "vak": "Extra: ziek",
@@ -106,28 +106,6 @@
       "startISO": "2026-04-01T09:10:00.000Z",
       "eindISO": "2026-04-01T10:00:00.000Z",
       "bron": "magister"
-    },
-    {
-      "vak": "tn",
-      "tijd": "09:20 - 10:10",
-      "lokaal": "G06",
-      "groep": "H1D",
-      "datum": "wo 01-04-2026",
-      "startISO": "2026-04-01T09:20:00.000Z",
-      "eindISO": "2026-04-01T10:10:00.000Z",
-      "kleur": null,
-      "bron": "eduflex"
-    },
-    {
-      "vak": "tn",
-      "tijd": "10:10 - 11:00",
-      "lokaal": "G06",
-      "groep": "H1D",
-      "datum": "wo 01-04-2026",
-      "startISO": "2026-04-01T10:10:00.000Z",
-      "eindISO": "2026-04-01T11:00:00.000Z",
-      "kleur": null,
-      "bron": "eduflex"
     },
     {
       "vak": "Extra: ziek",
