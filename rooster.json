@@ -1,39 +1,7 @@
 {
-  "bijgewerkt": "2026-04-01T16:32:33.993Z",
+  "bijgewerkt": "2026-04-02T05:43:43.143Z",
   "totaal": 33,
   "afspraken": [
-    {
-      "vak": "Vierkant rooster",
-      "tijd": "06:25 - 07:15",
-      "lokaal": "meldkamer",
-      "groep": null,
-      "datum": "wo 01-04-2026",
-      "startISO": "2026-04-01T06:25:00.000Z",
-      "eindISO": "2026-04-01T07:15:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "Extra: ziek",
-      "tijd": "07:25 - 09:05",
-      "lokaal": null,
-      "groep": null,
-      "datum": "wo 01-04-2026",
-      "startISO": "2026-04-01T07:25:00.000Z",
-      "eindISO": "2026-04-01T09:05:00.000Z",
-      "kleur": "ff0000",
-      "bron": "eduflex"
-    },
-    {
-      "vak": "Extra: ziek",
-      "tijd": "11:30 - 13:10",
-      "lokaal": null,
-      "groep": null,
-      "datum": "wo 01-04-2026",
-      "startISO": "2026-04-01T11:30:00.000Z",
-      "eindISO": "2026-04-01T13:10:00.000Z",
-      "kleur": "ff0000",
-      "bron": "eduflex"
-    },
     {
       "vak": "Extra: ziek",
       "tijd": "07:25 - 13:10",
@@ -333,6 +301,36 @@
       "datum": "di 14-04-2026",
       "startISO": "2026-04-14T12:20:00.000Z",
       "eindISO": "2026-04-14T14:00:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "Vierkant rooster",
+      "tijd": "06:25 - 07:15",
+      "lokaal": "meldkamer",
+      "groep": null,
+      "datum": "wo 15-04-2026",
+      "startISO": "2026-04-15T06:25:00.000Z",
+      "eindISO": "2026-04-15T07:15:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "2 straks - V1C",
+      "tijd": "07:15 - 08:05",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 15-04-2026",
+      "startISO": "2026-04-15T07:15:00.000Z",
+      "eindISO": "2026-04-15T08:05:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "7 straks - V1E",
+      "tijd": "12:20 - 13:10",
+      "lokaal": "G06",
+      "groep": null,
+      "datum": "wo 15-04-2026",
+      "startISO": "2026-04-15T12:20:00.000Z",
+      "eindISO": "2026-04-15T13:10:00.000Z",
       "bron": "magister"
     }
   ],
