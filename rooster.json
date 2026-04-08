@@ -1,6 +1,6 @@
 {
-  "bijgewerkt": "2026-04-08T05:49:41.910Z",
-  "totaal": 34,
+  "bijgewerkt": "2026-04-08T07:28:24.761Z",
+  "totaal": 19,
   "afspraken": [
     {
       "vak": "Vierkant rooster",
@@ -78,46 +78,6 @@
       "bron": "eduflex"
     },
     {
-      "vak": "3 tn - M2H_tnC0",
-      "tijd": "08:20 - 09:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "ma 13-04-2026",
-      "startISO": "2026-04-13T08:20:00.000Z",
-      "eindISO": "2026-04-13T09:10:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "4 tn - M2H_tnC0",
-      "tijd": "09:10 - 10:00",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "ma 13-04-2026",
-      "startISO": "2026-04-13T09:10:00.000Z",
-      "eindISO": "2026-04-13T10:00:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "5 straks - V1B",
-      "tijd": "10:30 - 11:20",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "ma 13-04-2026",
-      "startISO": "2026-04-13T10:30:00.000Z",
-      "eindISO": "2026-04-13T11:20:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "6 straks - V1B",
-      "tijd": "11:20 - 12:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "ma 13-04-2026",
-      "startISO": "2026-04-13T11:20:00.000Z",
-      "eindISO": "2026-04-13T12:10:00.000Z",
-      "bron": "magister"
-    },
-    {
       "vak": "Vierkant rooster",
       "tijd": "11:20 - 14:00",
       "lokaal": "meldkamer",
@@ -125,26 +85,6 @@
       "datum": "ma 13-04-2026",
       "startISO": "2026-04-13T11:20:00.000Z",
       "eindISO": "2026-04-13T14:00:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "3 tn - V1H",
-      "tijd": "08:20 - 09:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "di 14-04-2026",
-      "startISO": "2026-04-14T08:20:00.000Z",
-      "eindISO": "2026-04-14T09:10:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "4 tn - V1H",
-      "tijd": "09:10 - 10:00",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "di 14-04-2026",
-      "startISO": "2026-04-14T09:10:00.000Z",
-      "eindISO": "2026-04-14T10:00:00.000Z",
       "bron": "magister"
     },
     {
@@ -168,46 +108,6 @@
       "bron": "magister"
     },
     {
-      "vak": "2 straks - V1C",
-      "tijd": "07:15 - 08:05",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "wo 15-04-2026",
-      "startISO": "2026-04-15T07:15:00.000Z",
-      "eindISO": "2026-04-15T08:05:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "7 straks - V1E",
-      "tijd": "12:20 - 13:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "wo 15-04-2026",
-      "startISO": "2026-04-15T12:20:00.000Z",
-      "eindISO": "2026-04-15T13:10:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "5 straks - V1B",
-      "tijd": "10:30 - 11:20",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "do 16-04-2026",
-      "startISO": "2026-04-16T10:30:00.000Z",
-      "eindISO": "2026-04-16T11:20:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "1 straks - V1C",
-      "tijd": "06:25 - 07:15",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T06:25:00.000Z",
-      "eindISO": "2026-04-17T07:15:00.000Z",
-      "bron": "magister"
-    },
-    {
       "vak": "Vierkant rooster",
       "tijd": "06:25 - 07:15",
       "lokaal": "meldkamer",
@@ -215,56 +115,6 @@
       "datum": "vr 17-04-2026",
       "startISO": "2026-04-17T06:25:00.000Z",
       "eindISO": "2026-04-17T07:15:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "2 straks - V1C",
-      "tijd": "07:15 - 08:05",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T07:15:00.000Z",
-      "eindISO": "2026-04-17T08:05:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "3 tn - V1L",
-      "tijd": "08:20 - 09:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T08:20:00.000Z",
-      "eindISO": "2026-04-17T09:10:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "4 tn - V1L",
-      "tijd": "09:10 - 10:00",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T09:10:00.000Z",
-      "eindISO": "2026-04-17T10:00:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "5 straks - V1E",
-      "tijd": "10:30 - 11:20",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T10:30:00.000Z",
-      "eindISO": "2026-04-17T11:20:00.000Z",
-      "bron": "magister"
-    },
-    {
-      "vak": "6 straks - V1E",
-      "tijd": "11:20 - 12:10",
-      "lokaal": "G06",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T11:20:00.000Z",
-      "eindISO": "2026-04-17T12:10:00.000Z",
       "bron": "magister"
     },
     {
