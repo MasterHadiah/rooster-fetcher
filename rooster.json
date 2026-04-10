@@ -1,18 +1,7 @@
 {
-  "bijgewerkt": "2026-04-09T17:38:54.727Z",
-  "totaal": 9,
+  "bijgewerkt": "2026-04-10T06:00:55.426Z",
+  "totaal": 8,
   "afspraken": [
-    {
-      "vak": "Extra: xxx",
-      "tijd": "07:25 - 13:10",
-      "lokaal": null,
-      "groep": null,
-      "datum": "do 09-04-2026",
-      "startISO": "2026-04-09T07:25:00.000Z",
-      "eindISO": "2026-04-09T13:10:00.000Z",
-      "kleur": "ffff80",
-      "bron": "eduflex"
-    },
     {
       "vak": "Vierkant rooster",
       "tijd": "06:25 - 07:15",
