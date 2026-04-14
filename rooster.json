@@ -1,17 +1,7 @@
 {
-  "bijgewerkt": "2026-04-13T16:43:40.038Z",
-  "totaal": 8,
+  "bijgewerkt": "2026-04-14T06:02:46.933Z",
+  "totaal": 7,
   "afspraken": [
-    {
-      "vak": "Vierkant rooster",
-      "tijd": "11:20 - 14:00",
-      "lokaal": "meldkamer",
-      "groep": null,
-      "datum": "ma 13-04-2026",
-      "startISO": "2026-04-13T11:20:00.000Z",
-      "eindISO": "2026-04-13T14:00:00.000Z",
-      "bron": "magister"
-    },
     {
       "vak": "Vierkant rooster",
       "tijd": "12:20 - 14:00",
