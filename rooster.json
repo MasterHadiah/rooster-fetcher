@@ -1,17 +1,7 @@
 {
-  "bijgewerkt": "2026-04-17T16:57:55.621Z",
-  "totaal": 3,
+  "bijgewerkt": "2026-04-20T06:19:52.565Z",
+  "totaal": 4,
   "afspraken": [
-    {
-      "vak": "Vierkant rooster",
-      "tijd": "06:25 - 07:15",
-      "lokaal": "meldkamer",
-      "groep": null,
-      "datum": "vr 17-04-2026",
-      "startISO": "2026-04-17T06:25:00.000Z",
-      "eindISO": "2026-04-17T07:15:00.000Z",
-      "bron": "magister"
-    },
     {
       "vak": "Vierkant rooster",
       "tijd": "11:20 - 14:00",
@@ -31,6 +21,28 @@
       "startISO": "2026-04-21T12:20:00.000Z",
       "eindISO": "2026-04-21T14:00:00.000Z",
       "bron": "magister"
+    },
+    {
+      "vak": "Extra: verg.",
+      "tijd": "13:20 - 14:10",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 21-04-2026",
+      "startISO": "2026-04-21T13:20:00.000Z",
+      "eindISO": "2026-04-21T14:10:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
+    },
+    {
+      "vak": "Extra: verg.",
+      "tijd": "14:10 - 15:00",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 21-04-2026",
+      "startISO": "2026-04-21T14:10:00.000Z",
+      "eindISO": "2026-04-21T15:00:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
     }
   ],
   "fouten": {}
