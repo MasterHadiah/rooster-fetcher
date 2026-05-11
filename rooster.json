@@ -1,6 +1,39 @@
 {
-  "bijgewerkt": "2026-05-08T17:23:44.973Z",
-  "totaal": 0,
-  "afspraken": [],
+  "bijgewerkt": "2026-05-11T07:49:24.681Z",
+  "totaal": 3,
+  "afspraken": [
+    {
+      "vak": "Extra: verg.",
+      "tijd": "13:20 - 14:10",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 12-05-2026",
+      "startISO": "2026-05-12T13:20:00.000Z",
+      "eindISO": "2026-05-12T14:10:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
+    },
+    {
+      "vak": "Extra: verg.",
+      "tijd": "14:10 - 15:00",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 12-05-2026",
+      "startISO": "2026-05-12T14:10:00.000Z",
+      "eindISO": "2026-05-12T15:00:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
+    },
+    {
+      "vak": "Pinksteren",
+      "tijd": "00:00 - 00:00",
+      "lokaal": "St. Chr. Voortgezet Onderwijs \\, Jan Arentsz\\, Mandenmakerstraat\\,",
+      "groep": null,
+      "datum": "ma 25-05-2026",
+      "startISO": "2026-05-25T00:00:00.000Z",
+      "eindISO": "2026-05-26T00:00:00.000Z",
+      "bron": "magister"
+    }
+  ],
   "fouten": {}
 }
