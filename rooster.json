@@ -1,17 +1,6 @@
 {
-  "bijgewerkt": "2026-05-13T17:35:42.639Z",
-  "totaal": 1,
-  "afspraken": [
-    {
-      "vak": "Pinksteren",
-      "tijd": "00:00 - 00:00",
-      "lokaal": "St. Chr. Voortgezet Onderwijs \\, Jan Arentsz\\, Mandenmakerstraat\\,",
-      "groep": null,
-      "datum": "ma 25-05-2026",
-      "startISO": "2026-05-25T00:00:00.000Z",
-      "eindISO": "2026-05-26T00:00:00.000Z",
-      "bron": "magister"
-    }
-  ],
+  "bijgewerkt": "2026-05-14T06:48:45.712Z",
+  "totaal": 0,
+  "afspraken": [],
   "fouten": {}
 }
