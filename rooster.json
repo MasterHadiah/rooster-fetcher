@@ -1,7 +1,29 @@
 {
-  "bijgewerkt": "2026-05-15T17:10:37.559Z",
-  "totaal": 1,
+  "bijgewerkt": "2026-05-18T08:08:44.774Z",
+  "totaal": 3,
   "afspraken": [
+    {
+      "vak": "Extra: verg.",
+      "tijd": "13:20 - 14:10",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 19-05-2026",
+      "startISO": "2026-05-19T13:20:00.000Z",
+      "eindISO": "2026-05-19T14:10:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
+    },
+    {
+      "vak": "Extra: verg.",
+      "tijd": "14:10 - 15:00",
+      "lokaal": null,
+      "groep": null,
+      "datum": "di 19-05-2026",
+      "startISO": "2026-05-19T14:10:00.000Z",
+      "eindISO": "2026-05-19T15:00:00.000Z",
+      "kleur": "0080c0",
+      "bron": "eduflex"
+    },
     {
       "vak": "Pinksteren",
       "tijd": "00:00 - 00:00",
