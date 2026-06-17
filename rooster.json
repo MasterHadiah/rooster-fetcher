@@ -1,29 +1,6 @@
 {
-  "bijgewerkt": "2026-06-16T18:56:01.691Z",
-  "totaal": 2,
-  "afspraken": [
-    {
-      "vak": "Extra: verg.",
-      "tijd": "13:20 - 14:10",
-      "lokaal": null,
-      "groep": null,
-      "datum": "di 16-06-2026",
-      "startISO": "2026-06-16T13:20:00.000Z",
-      "eindISO": "2026-06-16T14:10:00.000Z",
-      "kleur": "0080c0",
-      "bron": "eduflex"
-    },
-    {
-      "vak": "Extra: verg.",
-      "tijd": "14:10 - 15:00",
-      "lokaal": null,
-      "groep": null,
-      "datum": "di 16-06-2026",
-      "startISO": "2026-06-16T14:10:00.000Z",
-      "eindISO": "2026-06-16T15:00:00.000Z",
-      "kleur": "0080c0",
-      "bron": "eduflex"
-    }
-  ],
+  "bijgewerkt": "2026-06-17T09:04:35.465Z",
+  "totaal": 0,
+  "afspraken": [],
   "fouten": {}
 }
