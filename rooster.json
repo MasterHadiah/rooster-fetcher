@@ -1,8 +1,6 @@
 {
-  "bijgewerkt": "2026-07-01T08:22:45.204Z",
+  "bijgewerkt": "2026-07-01T11:39:09.403Z",
   "totaal": 0,
   "afspraken": [],
-  "fouten": {
-    "eduflex": "Runtime.callFunctionOn timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed."
-  }
+  "fouten": {}
 }
