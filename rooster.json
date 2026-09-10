@@ -1,6 +1,327 @@
 {
-  "bijgewerkt": "2026-09-09T13:34:41.029Z",
-  "totaal": 0,
-  "afspraken": [],
+  "bijgewerkt": "2026-09-10T08:49:01.192Z",
+  "totaal": 32,
+  "afspraken": [
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 14-09-2026",
+      "startISO": "2026-09-14T08:05:00.000Z",
+      "eindISO": "2026-09-14T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 14-09-2026",
+      "startISO": "2026-09-14T08:55:00.000Z",
+      "eindISO": "2026-09-14T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 14-09-2026",
+      "startISO": "2026-09-14T10:00:00.000Z",
+      "eindISO": "2026-09-14T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 14-09-2026",
+      "startISO": "2026-09-14T10:50:00.000Z",
+      "eindISO": "2026-09-14T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 15-09-2026",
+      "startISO": "2026-09-15T08:05:00.000Z",
+      "eindISO": "2026-09-15T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 15-09-2026",
+      "startISO": "2026-09-15T08:55:00.000Z",
+      "eindISO": "2026-09-15T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 15-09-2026",
+      "startISO": "2026-09-15T10:00:00.000Z",
+      "eindISO": "2026-09-15T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 15-09-2026",
+      "startISO": "2026-09-15T10:50:00.000Z",
+      "eindISO": "2026-09-15T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 16-09-2026",
+      "startISO": "2026-09-16T08:05:00.000Z",
+      "eindISO": "2026-09-16T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 16-09-2026",
+      "startISO": "2026-09-16T08:55:00.000Z",
+      "eindISO": "2026-09-16T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 16-09-2026",
+      "startISO": "2026-09-16T10:00:00.000Z",
+      "eindISO": "2026-09-16T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 16-09-2026",
+      "startISO": "2026-09-16T10:50:00.000Z",
+      "eindISO": "2026-09-16T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "do 17-09-2026",
+      "startISO": "2026-09-17T08:05:00.000Z",
+      "eindISO": "2026-09-17T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "do 17-09-2026",
+      "startISO": "2026-09-17T08:55:00.000Z",
+      "eindISO": "2026-09-17T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "do 17-09-2026",
+      "startISO": "2026-09-17T10:00:00.000Z",
+      "eindISO": "2026-09-17T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "do 17-09-2026",
+      "startISO": "2026-09-17T10:50:00.000Z",
+      "eindISO": "2026-09-17T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "vr 18-09-2026",
+      "startISO": "2026-09-18T08:05:00.000Z",
+      "eindISO": "2026-09-18T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "vr 18-09-2026",
+      "startISO": "2026-09-18T08:55:00.000Z",
+      "eindISO": "2026-09-18T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "vr 18-09-2026",
+      "startISO": "2026-09-18T10:00:00.000Z",
+      "eindISO": "2026-09-18T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "vr 18-09-2026",
+      "startISO": "2026-09-18T10:50:00.000Z",
+      "eindISO": "2026-09-18T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 21-09-2026",
+      "startISO": "2026-09-21T08:05:00.000Z",
+      "eindISO": "2026-09-21T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 21-09-2026",
+      "startISO": "2026-09-21T08:55:00.000Z",
+      "eindISO": "2026-09-21T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 21-09-2026",
+      "startISO": "2026-09-21T10:00:00.000Z",
+      "eindISO": "2026-09-21T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "ma 21-09-2026",
+      "startISO": "2026-09-21T10:50:00.000Z",
+      "eindISO": "2026-09-21T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 22-09-2026",
+      "startISO": "2026-09-22T08:05:00.000Z",
+      "eindISO": "2026-09-22T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 22-09-2026",
+      "startISO": "2026-09-22T08:55:00.000Z",
+      "eindISO": "2026-09-22T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 22-09-2026",
+      "startISO": "2026-09-22T10:00:00.000Z",
+      "eindISO": "2026-09-22T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "di 22-09-2026",
+      "startISO": "2026-09-22T10:50:00.000Z",
+      "eindISO": "2026-09-22T11:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 10:05-10:20",
+      "tijd": "08:05 - 08:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 23-09-2026",
+      "startISO": "2026-09-23T08:05:00.000Z",
+      "eindISO": "2026-09-23T08:20:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 10:55-11:10",
+      "tijd": "08:55 - 09:10",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 23-09-2026",
+      "startISO": "2026-09-23T08:55:00.000Z",
+      "eindISO": "2026-09-23T09:10:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze ABGH van 12:00-12:30",
+      "tijd": "10:00 - 10:30",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 23-09-2026",
+      "startISO": "2026-09-23T10:00:00.000Z",
+      "eindISO": "2026-09-23T10:30:00.000Z",
+      "bron": "magister"
+    },
+    {
+      "vak": "pauze CDEF van 12:50-13:20",
+      "tijd": "10:50 - 11:20",
+      "lokaal": "Mandenmakerstraat",
+      "groep": null,
+      "datum": "wo 23-09-2026",
+      "startISO": "2026-09-23T10:50:00.000Z",
+      "eindISO": "2026-09-23T11:20:00.000Z",
+      "bron": "magister"
+    }
+  ],
   "fouten": {}
 }
